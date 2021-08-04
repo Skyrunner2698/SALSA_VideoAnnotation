@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".PlayerActivity">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:id="@+id/exoplayer_dance"
+        app:hide_on_touch="true"
+        app:resize_mode="fit"
+        app:rewind_increment="10000"
+        app:fastforward_increment="10000"
+        app:show_timeout="5000"
+        app:shutter_background_color="#000000"
+        app:use_controller="true"
+        app:controller_layout_id="@layout/custom_controller"
+        app:player_layout_id="@layout/exo_simple_player_view"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:id="@+id/newAnnotation"
+        android:text="@string/new_annotations"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/exoplayer_dance"
+        android:layout_centerHorizontal="true"/>
+
+
+
+</RelativeLayout>
