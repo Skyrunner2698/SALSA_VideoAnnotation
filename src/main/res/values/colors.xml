@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorAccent">#009688</color>
     <color name = "colorPrimaryDark">#100F0F</color>
+    <color name="DarkMode">#181818</color>
+    <color name="Menus">#212121</color>
+    <color name="PrimaryText">#FFFFFF</color>
+    <color name="SecondaryText">#AAAAAA</color>
 </resources>

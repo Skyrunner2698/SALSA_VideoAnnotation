@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/DarkMode"
     tools:context=".PlayerActivity">
 
     <com.google.android.exoplayer2.ui.PlayerView
@@ -22,15 +22,32 @@
         app:controller_layout_id="@layout/custom_controller"
         app:player_layout_id="@layout/exo_simple_player_view"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:id="@+id/newAnnotation"
-        android:text="@string/new_annotations"
-        android:layout_marginTop="20dp"
+<!--    <Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginRight="10dp"-->
+<!--        android:id="@+id/newAnnotation"-->
+<!--        android:text="@string/new_annotations"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_below="@id/exoplayer_dance"-->
+<!--        android:layout_centerHorizontal="true"/>-->
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/new_annotation"
+        android:src="@drawable/ic_baseline_add_annotation"
         android:layout_below="@id/exoplayer_dance"
-        android:layout_centerHorizontal="true"/>
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/annotation_controls"
+        android:layout_below="@id/new_annotation"/>
+
 
 
 

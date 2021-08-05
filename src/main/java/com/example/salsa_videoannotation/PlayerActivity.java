@@ -8,10 +8,12 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -34,6 +36,7 @@ public class PlayerActivity extends AppCompatActivity {
     Button saveButton;
     TextView textToTest;
     Button loadButton;
+    ImageView createAnnotation;
     int position = -1;
     ArrayList<VideoFiles> myFiles = new ArrayList<>();
     @Override
@@ -43,6 +46,7 @@ public class PlayerActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_player);
         playerView = findViewById(R.id.exoplayer_dance);
+        createAnnotation = findViewById(R.id.new_annotation);
         position = getIntent().getIntExtra("position", -1);
         String sender = getIntent().getStringExtra("sender");
         if (sender.equals("FolderIsSending"))
@@ -72,35 +76,44 @@ public class PlayerActivity extends AppCompatActivity {
 //                }
 //            }).setPosition(5000).send();
 
-
-            saveButton.setOnClickListener(new OnClickListener() {
+            createAnnotation.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    StorageModule storageModule = new StorageModule();
-                    if (storageModule.isExternalStorageWritable())
-                    {
-                        if(storageModule.storeXML(PlayerActivity.this))
-                        {
-                            Toast.makeText(PlayerActivity.this, "Saved Bitches", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(PlayerActivity.this, "Failed Bitches", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                    Toast.makeText(PlayerActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.annotation_controls, new AnnotationControlsFragment());
+                    fragmentTransaction.commit();
                 }
             });
 
-            loadButton.setOnClickListener(new OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                StorageModule storageModule = new StorageModule();
-                if (storageModule.isExternalStorageWritable())
-                {
-                    textToTest.setText(storageModule.loadXML(PlayerActivity.this));
-                }
-            }
-        });
+//            saveButton.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    StorageModule storageModule = new StorageModule();
+//                    if (storageModule.isExternalStorageWritable())
+//                    {
+//                        if(storageModule.storeXML(PlayerActivity.this))
+//                        {
+//                            Toast.makeText(PlayerActivity.this, "Saved Bitches", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else
+//                        {
+//                            Toast.makeText(PlayerActivity.this, "Failed Bitches", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                }
+//            });
+//
+//            loadButton.setOnClickListener(new OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                StorageModule storageModule = new StorageModule();
+//                if (storageModule.isExternalStorageWritable())
+//                {
+//                    textToTest.setText(storageModule.loadXML(PlayerActivity.this));
+//                }
+//            }
+//        });
         }
     }
 
