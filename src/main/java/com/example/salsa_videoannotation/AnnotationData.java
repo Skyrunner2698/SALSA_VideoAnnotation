@@ -3,7 +3,10 @@ package com.example.salsa_videoannotation;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+
+import java.util.List;
 
 @Root
 public class AnnotationData
@@ -11,22 +14,25 @@ public class AnnotationData
     @Attribute
     private String id;
     @Element
-    private String category;
+    private String startTime;
     @Element
-    private String timeStamp;
-    @Element
-    private String content;
+    private String endTime;
+    @ElementList
+    private List<String> category;
+    @ElementList
+    private List<String> bodyPart;
 
     public AnnotationData()
     {
 
     }
 
-    public AnnotationData(String id, String category, String timeStamp, String content) {
+    public AnnotationData(String id, String startTime, String endTime, List<String> category, List<String> bodyPart) {
         this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.category = category;
-        this.timeStamp = timeStamp;
-        this.content = content;
+        this.bodyPart = bodyPart;
     }
 
     public String getId() {
@@ -37,27 +43,35 @@ public class AnnotationData
         this.id = id;
     }
 
-    public String getCategory() {
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public List<String> getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(List<String> category) {
         this.category = category;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public List<String> getBodyPart() {
+        return bodyPart;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setBodyPart(List<String> bodyPart) {
+        this.bodyPart = bodyPart;
     }
 }

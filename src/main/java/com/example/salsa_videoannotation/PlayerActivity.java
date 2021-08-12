@@ -26,16 +26,12 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
-
 import static com.example.salsa_videoannotation.VideoAdapter.videoFiles;
 import static com.example.salsa_videoannotation.VideoFolderAdapter.folderVideoFiles;
 
 public class PlayerActivity extends AppCompatActivity {
     PlayerView playerView;
     SimpleExoPlayer simpleExoPlayer;
-    Button saveButton;
-    TextView textToTest;
-    Button loadButton;
     ImageView createAnnotation;
     int position = -1;
     ArrayList<VideoFiles> myFiles = new ArrayList<>();
@@ -79,7 +75,6 @@ public class PlayerActivity extends AppCompatActivity {
             createAnnotation.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(PlayerActivity.this, "Hello", Toast.LENGTH_SHORT).show();
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
                             .replace(R.id.annotation_controls, new AnnotationControlsFragment());
                     fragmentTransaction.commit();
@@ -128,6 +123,7 @@ public class PlayerActivity extends AppCompatActivity {
         super.onDestroy();
         simpleExoPlayer.release();
     }
+
 
 //    @Override
 //    public void onSaveInstanceState(@NonNull Bundle outState) {

@@ -17,24 +17,21 @@ public class Annotations
     private ArrayList<AnnotationData> videoAnnotations = new ArrayList<>();
     @Element
     private String name;
-    @Element
-    private String type;
 
     public Annotations()
     {
     }
 
-    public Annotations(String id, String name, String type)
+    public Annotations(String id, String name)
     {
         this.id = id;
         this.name = name;
-        this.type = type;
 
-        AnnotationData data1 = new AnnotationData(id + "-1", "Games", "10000", "This game needs more work.");
-        AnnotationData data2 = new AnnotationData(id + "-2", "Bugs", "1342", "Clipping.");
-
-        videoAnnotations.add(data1);
-        videoAnnotations.add(data2);
+//        AnnotationData data1 = new AnnotationData(id + "-1", "Games", "10000", "This game needs more work.");
+//        AnnotationData data2 = new AnnotationData(id + "-2", "Bugs", "1342", "Clipping.");
+//
+//        videoAnnotations.add(data1);
+//        videoAnnotations.add(data2);
     }
 
     public void handleAnnotationManipulation()
@@ -74,14 +71,6 @@ public class Annotations
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public ArrayList<AnnotationData> getVideoAnnotations()

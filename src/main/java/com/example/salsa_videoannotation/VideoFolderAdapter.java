@@ -36,6 +36,7 @@ public class VideoFolderAdapter extends RecyclerView.Adapter<VideoFolderAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.fileName.setText(folderVideoFiles.get(position).getTitle());
+        holder.videoDuration.setText(folderVideoFiles.get(position).getDuration());
         Glide.with(mContext).load(new File(folderVideoFiles.get(position).getPath())).into(holder.thumbNail);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

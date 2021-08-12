@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class StorageModule
 {
@@ -28,18 +29,18 @@ public class StorageModule
 
     }
 
-    public boolean isExternalStorageWritable()
+    public static boolean isExternalStorageWritable()
     {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    private File getPrimaryExternalStorageVolume(Context context)
+    private static File getPrimaryExternalStorageVolume(Context context)
     {
         File[] externalStorageVolumes = ContextCompat.getExternalFilesDirs(context, null);
         return externalStorageVolumes[0];
     }
 
-    public boolean storeXML(Context context)
+    public static boolean storeXML(Context context)
     {
         try
         {
@@ -48,11 +49,9 @@ public class StorageModule
             {
                 directory.mkdir();
             }
-            Annotations annotations = new Annotations("1", "Test1", "Critique");
 
             Serializer serializer = new Persister();
             File toSave = new File(directory, FILENAME);
-            serializer.write(annotations, toSave);
         }
         catch (Exception e)
         {
@@ -61,22 +60,26 @@ public class StorageModule
         return true;
     }
 
-    public String loadXML(Context context)
+    public static ArrayList<Annotations> loadXML(Context context)
     {
+        ArrayList<Annotations> tempAnnotationsList = new ArrayList<>();
         try
         {
             File directory = new File(getPrimaryExternalStorageVolume(context) + "/" + FOLDER_NAME);
             File[] files = directory.listFiles();
-            File fileToLoad = files[0];
 
-            Serializer serializer = new Persister();
-            Annotations annotations = serializer.read(Annotations.class, fileToLoad);
-            return annotations.getType();
+            for(File fileToLoad : files)
+            {
+                Serializer serializer = new Persister();
+                Annotations annotations = serializer.read(Annotations.class, fileToLoad);
+                tempAnnotationsList.add(annotations);
+            }
+
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        return "Not Found";
+        return tempAnnotationsList;
     }
 }

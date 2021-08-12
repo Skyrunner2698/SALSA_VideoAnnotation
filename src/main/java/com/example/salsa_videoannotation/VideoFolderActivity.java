@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class VideoFolderActivity extends AppCompatActivity {
 
@@ -65,7 +66,7 @@ public class VideoFolderActivity extends AppCompatActivity {
                 String title = cursor.getString(2);
                 String size = cursor.getString(3);
                 String dateAdded = cursor.getString(4);
-                String duration = cursor.getString(5);
+                String duration = HelperTool.createTimeRepresentation(cursor.getInt(5));
                 String fileName = cursor.getString(6);
                 String bucketName = cursor.getString(7);
                 VideoFiles videoFiles = new VideoFiles(id, path, title, fileName, size, dateAdded, duration);

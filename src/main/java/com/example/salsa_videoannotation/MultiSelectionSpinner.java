@@ -67,7 +67,6 @@ public class MultiSelectionSpinner extends androidx.appcompat.widget.AppCompatSp
         mItems = items;
         mSelection = new boolean[mItems.length];
         simple_adapter.clear();
-        simple_adapter.add(mItems[0]);
         Arrays.fill(mSelection, false);
     }
 
@@ -76,7 +75,6 @@ public class MultiSelectionSpinner extends androidx.appcompat.widget.AppCompatSp
         mItems = items.toArray(new String[items.size()]);
         mSelection = new boolean[mItems.length];
         simple_adapter.clear();
-        simple_adapter.add(mItems[0]);
         Arrays.fill(mSelection, false);
     }
 

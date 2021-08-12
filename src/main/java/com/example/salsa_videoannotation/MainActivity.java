@@ -21,13 +21,16 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private static int REQUEST_CODE = 124352;
     BottomNavigationView bottomNav;
     static ArrayList<VideoFiles> videoFiles = new ArrayList<>();
     static ArrayList<String> folderList = new ArrayList<>();
+    static ArrayList<Annotations> annotationsList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
             videoFiles = getAllVideos(this);
+            annotationsList = StorageModule.loadXML(this);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
                     .replace(R.id.mainFragment, new FolderFragment());
             fragmentTransaction.commit();
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 String title = cursor.getString(2);
                 String size = cursor.getString(3);
                 String dateAdded = cursor.getString(4);
-                String duration = cursor.getString(5);
+                String duration = HelperTool.createTimeRepresentation(cursor.getInt(5));
                 String fileName = cursor.getString(6);
                 VideoFiles videoFiles = new VideoFiles(id, path, title, fileName, size, dateAdded, duration);
                 Log.e("Path", path);

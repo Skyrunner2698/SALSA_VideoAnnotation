@@ -1,39 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AnnotationControlsFragment">
 
     <TextView
+        android:id="@+id/start_time_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/category_label"
-        android:textColor="@color/SecondaryText"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/start_time"
+        android:textColor="@color/PrimaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/end_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="40dp"
+        android:text="@string/end_time"
+        android:textColor="@color/PrimaryText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="5dp"
+        android:text="03:10"
+        android:textColor="@color/PrimaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/start_time_label" />
+
+    <EditText
+        android:id="@+id/end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="40dp"
+        android:text="03:12"
+        android:textColor="@color/PrimaryText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/end_time_label" />
+
+    <TextView
+        android:id="@+id/category_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:id="@+id/category_label"/>
+        android:layout_marginTop="5dp"
+        android:text="@string/category_label"
+        android:textColor="@color/PrimaryText"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/start_time" />
 
     <View
+        android:id="@+id/view"
         style="@style/DividerLine"
-        android:layout_below="@id/category_label"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/category_label" />
 
 
     <com.example.salsa_videoannotation.MultiSelectionSpinner
+        android:id="@+id/categorySelector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/categorySelector"
-        android:layout_below="@id/category_label"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:popupTheme="@color/Menus"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/category_label" />
 
     <View
+        android:id="@+id/view2"
         style="@style/DividerLine"
-        android:layout_below="@+id/categorySelector" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categorySelector" />
 
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/bodypart_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/bodypart_label"
+        android:textColor="@color/PrimaryText"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categorySelector" />
+
+    <View
+        android:id="@+id/view3"
+        style="@style/DividerLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bodypart_label" />
+
+
+    <com.example.salsa_videoannotation.MultiSelectionSpinner
+        android:id="@+id/bodypartSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:popupTheme="@color/Menus"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bodypart_label" />
+
+    <View
+        android:id="@+id/bodypartBottomDivider"
+        style="@style/DividerLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bodypartSelector" />
+
+
+    <EditText
+        android:id="@+id/annotation_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="Enter Annotation Text"
+        android:textColor="@color/PrimaryText"
+        android:textColorHint="@color/SecondaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bodypartBottomDivider" />
+
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/Menus"
+        android:text="@string/save"
+        android:onClick="addNewAnnotationAndSave"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/back_button"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_content"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="OnClick" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/save_button"
+        android:background="@color/Menus"
+        android:text="@string/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/save_button"
+        app:layout_constraintTop_toBottomOf="@id/annotation_content"
+        app:layout_constraintVertical_bias="1.0"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
