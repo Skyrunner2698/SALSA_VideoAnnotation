@@ -5,12 +5,16 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.List;
 
 @Root
 public class Annotations
 {
+    public static final int CREATE_TRANSACTION = 1;
+    public static final int UPDATE_TRANSACTION = 2;
+    public static final int DELETE_TRANSACTION = 3;
+    public static final int PLACEHOLDER_VIDEO_ANNOTATION_ID = 0;
     @Attribute
     private String id;
     @ElementList
@@ -34,24 +38,36 @@ public class Annotations
 //        videoAnnotations.add(data2);
     }
 
-    public void handleAnnotationManipulation()
+    public void handleAnnotationManipulation(int transactionType, int videoAnnotationId, long startTime, long endTime, List<String> category, List<String> bodyPart, String content)
+    {
+        switch (transactionType)
+        {
+            case CREATE_TRANSACTION:
+                addNewAnnotation(startTime, endTime, category, bodyPart, content);
+                break;
+            case UPDATE_TRANSACTION:
+                updateAnnotation();
+                break;
+            case DELETE_TRANSACTION:
+                deleteAnnotation();
+                break;
+        }
+    }
+
+    private void deleteAnnotation()
     {
 
     }
 
-    public void deleteAnnotation()
+    private void updateAnnotation()
     {
 
     }
 
-    public void updateAnnotation()
+    private void addNewAnnotation(long startTime, long endTime, List<String> category, List<String> bodyPart, String content)
     {
-
-    }
-
-    public void addNewAnnotation()
-    {
-
+        AnnotationData newAnnotation = new AnnotationData(videoAnnotations.size() + 1, startTime, endTime, category, bodyPart, content);
+        videoAnnotations.add(newAnnotation);
     }
 
     public String getId()

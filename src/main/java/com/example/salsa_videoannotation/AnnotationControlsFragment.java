@@ -50,29 +50,43 @@ public class AnnotationControlsFragment extends Fragment
         return view;
     }
 
-    public void addNewAnnotationAndSave(View view)
+    public void addAnnotationAndSave()
     {
-        String id = playerActivity.myFiles.get(playerActivity.position).getId();
-        Optional<Annotations> existingAnnotationOptional = annotationsList.stream().filter(p -> p.getId().equals(id)).findFirst();
-        Annotations annotations;
-        if (existingAnnotationOptional.isPresent())
+        if(checkValues())
         {
-            annotations = existingAnnotationOptional.get();
+            String id = playerActivity.myFiles.get(playerActivity.position).getId();
+            Annotations annotations = HelperTool.getAnnotationByVideoId(id);
+
+            annotations.handleAnnotationManipulation(Annotations.CREATE_TRANSACTION,
+                    Annotations.PLACEHOLDER_VIDEO_ANNOTATION_ID, HelperTool.convertTimeToMilliseconds(startTime.getText().toString())
+                    , HelperTool.convertTimeToMilliseconds(endTime.getText().toString()),
+                    categoryMultiSelectSpinner.getSelectedStrings(), bodypartMultiSelectSpinner.getSelectedStrings(),
+                    content.getText().toString());
+
+            saveAnnotation(annotations);
+            playerActivity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotations.getVideoAnnotations())).commit();
         }
         else
         {
-            annotations = new Annotations(id, "Teacher");
+            Toast.makeText(playerActivity, "Category, Bodypart and Annotation Text cannot be blank.", Toast.LENGTH_LONG).show();
         }
     }
 
 
-    public void saveAnnotation()
+    private void saveAnnotation(Annotations annotation)
     {
         StorageModule storageModule = new StorageModule();
         if (storageModule.isExternalStorageWritable())
         {
-            if(storageModule.storeXML(getContext()))
+            if(storageModule.storeXML(getContext(), annotation))
             {
+                int position = annotationsList.indexOf(annotation);
+                if(position != -1)
+                    annotationsList.set(position, annotation);
+                else
+                    annotationsList.add(annotation);
+
                 Toast.makeText(getContext(), "Saved Bitches", Toast.LENGTH_SHORT).show();
             }
             else
@@ -80,5 +94,15 @@ public class AnnotationControlsFragment extends Fragment
                 Toast.makeText(getContext(), "Failed Bitches", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public boolean checkValues()
+    {
+        if (categoryMultiSelectSpinner.getSelectedStrings().size() == 0 ||
+        bodypartMultiSelectSpinner.getSelectedStrings().size() == 0 ||
+        content.getText().equals(""))
+            return false;
+        else
+            return true;
     }
 }

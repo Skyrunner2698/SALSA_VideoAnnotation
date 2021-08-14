@@ -22,7 +22,8 @@ import java.util.ArrayList;
 public class StorageModule
 {
     private static final String FOLDER_NAME = "SALSAAnnotations";
-    private static final String FILENAME = "XmlTest1.xml";
+    private static final String FEEDBACK_FILENAME_STARTER = "FeedbackAnnotation";
+    private static final String XML_FILE_EXTENSION = ".xml";
 
     public StorageModule()
     {
@@ -40,7 +41,7 @@ public class StorageModule
         return externalStorageVolumes[0];
     }
 
-    public static boolean storeXML(Context context)
+    public static boolean storeXML(Context context, Annotations annotation)
     {
         try
         {
@@ -49,9 +50,10 @@ public class StorageModule
             {
                 directory.mkdir();
             }
-
+            String fileName = FEEDBACK_FILENAME_STARTER + annotation.getId() + XML_FILE_EXTENSION;
             Serializer serializer = new Persister();
-            File toSave = new File(directory, FILENAME);
+            File toSave = new File(directory, fileName);
+            serializer.write(annotation, toSave);
         }
         catch (Exception e)
         {

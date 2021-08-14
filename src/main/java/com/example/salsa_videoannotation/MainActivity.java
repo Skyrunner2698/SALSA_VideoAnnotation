@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,9 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private static int REQUEST_CODE = 124352;
@@ -31,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<VideoFiles> videoFiles = new ArrayList<>();
     static ArrayList<String> folderList = new ArrayList<>();
     static ArrayList<Annotations> annotationsList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

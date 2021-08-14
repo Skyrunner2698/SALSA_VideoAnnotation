@@ -12,50 +12,53 @@ import java.util.List;
 public class AnnotationData
 {
     @Attribute
-    private String id;
+    private int id;
     @Element
-    private String startTime;
+    private long startTime;
     @Element
-    private String endTime;
+    private long endTime;
     @ElementList
     private List<String> category;
     @ElementList
     private List<String> bodyPart;
+    @Element
+    private String content;
 
     public AnnotationData()
     {
 
     }
 
-    public AnnotationData(String id, String startTime, String endTime, List<String> category, List<String> bodyPart) {
+    public AnnotationData(int id, long startTime, long endTime, List<String> category, List<String> bodyPart, String content) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.category = category;
         this.bodyPart = bodyPart;
+        this.content = content;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
@@ -73,5 +76,13 @@ public class AnnotationData
 
     public void setBodyPart(List<String> bodyPart) {
         this.bodyPart = bodyPart;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -14,7 +14,7 @@ import static com.example.salsa_videoannotation.MainActivity.videoFiles;
 
 public class FolderFragment extends Fragment {
 
-    com.example.salsa_videoannotation.FolderAdapter folderAdapter;
+    FolderAdapter folderAdapter;
     RecyclerView recyclerView;
     public FolderFragment() {
         // Required empty public constructor
@@ -28,7 +28,7 @@ public class FolderFragment extends Fragment {
         recyclerView = view.findViewById(R.id.folderRV);
         if(folderList != null && folderList.size() > 0 && videoFiles != null)
         {
-            folderAdapter = new com.example.salsa_videoannotation.FolderAdapter(folderList, videoFiles, getContext());
+            folderAdapter = new FolderAdapter(folderList, videoFiles, getContext());
             recyclerView.setAdapter(folderAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         }

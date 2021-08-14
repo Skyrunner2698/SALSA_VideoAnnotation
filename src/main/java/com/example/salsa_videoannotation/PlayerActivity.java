@@ -65,50 +65,18 @@ public class PlayerActivity extends AppCompatActivity {
             playerView.setKeepScreenOn(true);
             simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
-//            simpleExoPlayer.createMessage(new PlayerMessage.Target() {
-//                @Override
-//                public void handleMessage(int messageType, Object payload) throws ExoPlaybackException {
-//                    Toast.makeText(PlayerActivity.this, "5 Seconds", Toast.LENGTH_SHORT).show();
-//                }
-//            }).setPosition(5000).send();
+            Annotations annotationsForDisplay = HelperTool.getAnnotationByVideoId(myFiles.get(position).getId());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotationsForDisplay.getVideoAnnotations())).commit();
 
             createAnnotation.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.annotation_controls, new AnnotationControlsFragment());
-                    fragmentTransaction.commit();
+                    simpleExoPlayer.setPlayWhenReady(false);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.annotation_section, new AnnotationControlsFragment()).commit();
                 }
             });
-
-//            saveButton.setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    StorageModule storageModule = new StorageModule();
-//                    if (storageModule.isExternalStorageWritable())
-//                    {
-//                        if(storageModule.storeXML(PlayerActivity.this))
-//                        {
-//                            Toast.makeText(PlayerActivity.this, "Saved Bitches", Toast.LENGTH_SHORT).show();
-//                        }
-//                        else
-//                        {
-//                            Toast.makeText(PlayerActivity.this, "Failed Bitches", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }
-//            });
-//
-//            loadButton.setOnClickListener(new OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                StorageModule storageModule = new StorageModule();
-//                if (storageModule.isExternalStorageWritable())
-//                {
-//                    textToTest.setText(storageModule.loadXML(PlayerActivity.this));
-//                }
-//            }
-//        });
         }
     }
 
@@ -122,6 +90,20 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         simpleExoPlayer.release();
+    }
+
+    public void onSaveAnnotationButtonClick(View view)
+    {
+        AnnotationControlsFragment fragment = (AnnotationControlsFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
+        fragment.addAnnotationAndSave();
+    }
+
+    public void onBackButtonClick(View view)
+    {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.annotation_section, new AnnotationDisplayFragment(HelperTool.getAnnotationByVideoId(
+                        myFiles.get(position).getId()).getVideoAnnotations())).commit();
+        simpleExoPlayer.setPlayWhenReady(true);
     }
 
 
@@ -143,4 +125,11 @@ public class PlayerActivity extends AppCompatActivity {
 //            startPosition = Math.max(0, player.getContentPosition());
 //        }
 //    }
+
+//            simpleExoPlayer.createMessage(new PlayerMessage.Target() {
+//                @Override
+//                public void handleMessage(int messageType, Object payload) throws ExoPlaybackException {
+//                    Toast.makeText(PlayerActivity.this, "5 Seconds", Toast.LENGTH_SHORT).show();
+//                }
+//            }).setPosition(5000).send();
 }
