@@ -21,13 +21,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     private static int REQUEST_CODE = 124352;
     BottomNavigationView bottomNav;
     static ArrayList<VideoFiles> videoFiles = new ArrayList<>();
     static ArrayList<String> folderList = new ArrayList<>();
-    static ArrayList<Annotations> annotationsList = new ArrayList<>();
+    static HashMap<String, Annotations> annotationWrapperList = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
             videoFiles = getAllVideos(this);
-            annotationsList = StorageModule.loadXML(this);
+            annotationWrapperList = StorageModule.loadXML(this);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
                     .replace(R.id.mainFragment, new FolderFragment());
             fragmentTransaction.commit();

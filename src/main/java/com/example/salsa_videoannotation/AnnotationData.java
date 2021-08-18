@@ -1,6 +1,8 @@
 package com.example.salsa_videoannotation;
 
 
+import android.graphics.Bitmap;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -23,19 +25,21 @@ public class AnnotationData
     private List<String> bodyPart;
     @Element
     private String content;
+    private Bitmap thumbnail;
 
     public AnnotationData()
     {
 
     }
 
-    public AnnotationData(int id, long startTime, long endTime, List<String> category, List<String> bodyPart, String content) {
+    public AnnotationData(int id, long startTime, long endTime, List<String> category, List<String> bodyPart, String content, Bitmap thumbnail) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.category = category;
         this.bodyPart = bodyPart;
         this.content = content;
+        this.thumbnail = thumbnail;
     }
 
     public int getId() {
@@ -84,5 +88,13 @@ public class AnnotationData
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Bitmap getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Bitmap thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

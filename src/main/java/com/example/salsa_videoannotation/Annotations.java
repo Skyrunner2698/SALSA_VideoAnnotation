@@ -1,11 +1,15 @@
 package com.example.salsa_videoannotation;
 
+import android.graphics.Bitmap;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Root
@@ -15,38 +19,36 @@ public class Annotations
     public static final int UPDATE_TRANSACTION = 2;
     public static final int DELETE_TRANSACTION = 3;
     public static final int PLACEHOLDER_VIDEO_ANNOTATION_ID = 0;
+    public static final String PLACEHOLDER_VIDEOFILE_PATH = "Holder";
     @Attribute
     private String id;
-    @ElementList
-    private ArrayList<AnnotationData> videoAnnotations = new ArrayList<>();
     @Element
     private String name;
+    @Element
+    private String videoFilePath;
+    @ElementMap
+    private HashMap<Integer, AnnotationData> videoAnnotationsMap = new HashMap<>();
 
     public Annotations()
     {
     }
 
-    public Annotations(String id, String name)
+    public Annotations(String id, String name, String videoFilePath)
     {
         this.id = id;
         this.name = name;
-
-//        AnnotationData data1 = new AnnotationData(id + "-1", "Games", "10000", "This game needs more work.");
-//        AnnotationData data2 = new AnnotationData(id + "-2", "Bugs", "1342", "Clipping.");
-//
-//        videoAnnotations.add(data1);
-//        videoAnnotations.add(data2);
+        this.videoFilePath = videoFilePath;
     }
 
-    public void handleAnnotationManipulation(int transactionType, int videoAnnotationId, long startTime, long endTime, List<String> category, List<String> bodyPart, String content)
+    public void handleAnnotationManipulation(int transactionType, int videoAnnotationId, long startTime, long endTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail)
     {
         switch (transactionType)
         {
             case CREATE_TRANSACTION:
-                addNewAnnotation(startTime, endTime, category, bodyPart, content);
+                addNewAnnotation(startTime, endTime, category, bodyPart, content, annotationThumbnail);
                 break;
             case UPDATE_TRANSACTION:
-                updateAnnotation();
+                updateAnnotation(videoAnnotationId, startTime, endTime, category, bodyPart, content, annotationThumbnail);
                 break;
             case DELETE_TRANSACTION:
                 deleteAnnotation();
@@ -59,15 +61,16 @@ public class Annotations
 
     }
 
-    private void updateAnnotation()
+    private void updateAnnotation(int annotationId, long startTime, long endTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail)
     {
-
+        AnnotationData updatedAnnotation = new AnnotationData(annotationId, startTime, endTime, category, bodyPart, content, annotationThumbnail);
+        videoAnnotationsMap.replace(annotationId, updatedAnnotation);
     }
 
-    private void addNewAnnotation(long startTime, long endTime, List<String> category, List<String> bodyPart, String content)
+    private void addNewAnnotation(long startTime, long endTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail)
     {
-        AnnotationData newAnnotation = new AnnotationData(videoAnnotations.size() + 1, startTime, endTime, category, bodyPart, content);
-        videoAnnotations.add(newAnnotation);
+        AnnotationData newAnnotation = new AnnotationData(videoAnnotationsMap.size() + 1, startTime, endTime, category, bodyPart, content, annotationThumbnail);
+        videoAnnotationsMap.put(newAnnotation.getId(), newAnnotation);
     }
 
     public String getId()
@@ -89,14 +92,19 @@ public class Annotations
         this.name = name;
     }
 
-    public ArrayList<AnnotationData> getVideoAnnotations()
-    {
-        return videoAnnotations;
+    public HashMap<Integer, AnnotationData> getVideoAnnotationsMap() {
+        return videoAnnotationsMap;
     }
 
+    public void setVideoAnnotationsMap(HashMap<Integer, AnnotationData> videoAnnotationsMap) {
+        this.videoAnnotationsMap = videoAnnotationsMap;
+    }
 
-    public void setVideoAnnotations(ArrayList<AnnotationData> videoAnnotations)
-    {
-        this.videoAnnotations = videoAnnotations;
+    public String getVideoFilePath() {
+        return videoFilePath;
+    }
+
+    public void setVideoFilePath(String videoFilePath) {
+        this.videoFilePath = videoFilePath;
     }
 }

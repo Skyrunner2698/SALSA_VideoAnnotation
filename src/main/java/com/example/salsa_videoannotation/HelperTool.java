@@ -1,9 +1,10 @@
 package com.example.salsa_videoannotation;
 
-import java.util.Optional;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.salsa_videoannotation.MainActivity.annotationsList;
+import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
 
 public class HelperTool
 {
@@ -14,6 +15,7 @@ public class HelperTool
 
     public static String createTimeRepresentation(long time)
     {
+        time += 1000;
         return String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(time),
                 TimeUnit.MILLISECONDS.toSeconds(time) -
@@ -30,12 +32,42 @@ public class HelperTool
 
     public static Annotations getAnnotationByVideoId(String id)
     {
-        Optional<Annotations> existingAnnotationOptional = annotationsList.stream().filter(p -> p.getId().equals(id)).findFirst();
+        return getOrCreateAnnotationByVideoIdAndPath(id, Annotations.PLACEHOLDER_VIDEOFILE_PATH);
+    }
 
-        if (existingAnnotationOptional.isPresent())
-            return existingAnnotationOptional.get();
+    public static Annotations getOrCreateAnnotationByVideoIdAndPath(String id, String filepath)
+    {
+        if (annotationWrapperList.containsKey(id))
+            return annotationWrapperList.get(id);
         else
-            return new Annotations(id, "Teacher");
+            return new Annotations(id, "Teacher", filepath);
+    }
+
+    public static Bitmap getVideoFrame(long time, String filepath) {
+
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+
+        try {
+
+            retriever.setDataSource(filepath);
+            bitmap = retriever.getFrameAtTime(time*1000);
+
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
+
+        } finally {
+
+            try {
+
+                retriever.release();
+
+            } catch (RuntimeException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return bitmap;
     }
 
 }

@@ -67,7 +67,7 @@ public class PlayerActivity extends AppCompatActivity {
             simpleExoPlayer.setPlayWhenReady(true);
             Annotations annotationsForDisplay = HelperTool.getAnnotationByVideoId(myFiles.get(position).getId());
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotationsForDisplay.getVideoAnnotations())).commit();
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotationsForDisplay)).commit();
 
             createAnnotation.setOnClickListener(new OnClickListener() {
                 @Override
@@ -96,15 +96,25 @@ public class PlayerActivity extends AppCompatActivity {
     {
         AnnotationControlsFragment fragment = (AnnotationControlsFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
         fragment.addAnnotationAndSave();
+        simpleExoPlayer.setPlayWhenReady(true);
     }
 
     public void onBackButtonClick(View view)
     {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.annotation_section, new AnnotationDisplayFragment(HelperTool.getAnnotationByVideoId(
-                        myFiles.get(position).getId()).getVideoAnnotations())).commit();
+                        myFiles.get(position).getId()))).commit();
         simpleExoPlayer.setPlayWhenReady(true);
     }
+
+    public OnClickListener onSaveChangesAnnotationButtonClick = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AnnotationControlsFragment fragment = (AnnotationControlsFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
+            fragment.editAnnotationAndSave();
+            simpleExoPlayer.setPlayWhenReady(true);
+        }
+    };
 
 
 //    @Override

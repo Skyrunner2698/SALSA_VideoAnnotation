@@ -2,6 +2,7 @@ package com.example.salsa_videoannotation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,15 +20,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDisplayAdapter.MyViewHolder> {
     private Context mContext;
     static ArrayList<AnnotationData> annotations;
+    private Annotations annotationWrapper;
     View view;
 
-    public AnnotationDisplayAdapter(Context mContext, ArrayList<AnnotationData> annotations) {
+    public AnnotationDisplayAdapter(Context mContext, Annotations annotationWrapper) {
         this.mContext = mContext;
-        this.annotations = annotations;
+        this.annotationWrapper = annotationWrapper;
+        this.annotations = new ArrayList<AnnotationData>(annotationWrapper.getVideoAnnotationsMap().values());
+
         Collections.sort(annotations, new Comparator<AnnotationData>() {
             @Override
             public int compare(AnnotationData o1, AnnotationData o2) {
@@ -45,14 +51,16 @@ public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDis
 
     @Override
     public void onBindViewHolder(@NonNull AnnotationDisplayAdapter.MyViewHolder holder, int position) {
-        String time = HelperTool.createTimeRepresentation(annotations.get(position).getStartTime());
+        long startTime = annotations.get(position).getStartTime();
+        String time = HelperTool.createTimeRepresentation(startTime);
         holder.fileName.setText(time + " - Feedback " + (position + 1));
-//        Glide.with(mContext).load(new File(videoFiles.get(position).getPath())).into(holder.thumbNail);
+        Glide.with(mContext).load(annotations.get(position).getThumbnail()).into(holder.thumbNail);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("annotationId", annotations.get(position).getId());
+                bundle.putString("annotationWrapperId", annotationWrapper.getId());
 
                 AnnotationControlsFragment fragment = new AnnotationControlsFragment();
                 fragment.setArguments(bundle);

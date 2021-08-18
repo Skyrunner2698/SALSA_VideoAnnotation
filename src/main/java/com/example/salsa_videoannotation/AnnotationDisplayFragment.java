@@ -18,15 +18,15 @@ public class AnnotationDisplayFragment extends Fragment {
 
     AnnotationDisplayAdapter annotationDisplayAdapter;
     RecyclerView recyclerView;
-    ArrayList<AnnotationData> annotations;
+    Annotations annotationsWrapper;
 
     public AnnotationDisplayFragment() {
         // Required empty public constructor
     }
 
-    public AnnotationDisplayFragment(ArrayList<AnnotationData> annotations)
+    public AnnotationDisplayFragment(Annotations annotationsWrapper)
     {
-        this.annotations = annotations;
+        this.annotationsWrapper = annotationsWrapper;
     }
 
 
@@ -36,9 +36,9 @@ public class AnnotationDisplayFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_annotation_display, container, false);
         recyclerView = view.findViewById(R.id.annotation_display_RV);
-        if(annotations != null && annotations.size() > 0)
+        if(annotationsWrapper.getVideoAnnotationsMap() != null && annotationsWrapper.getVideoAnnotationsMap().size() > 0)
         {
-            annotationDisplayAdapter = new AnnotationDisplayAdapter(getContext(), annotations);
+            annotationDisplayAdapter = new AnnotationDisplayAdapter(getContext(), annotationsWrapper);
             recyclerView.setAdapter(annotationDisplayAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         }
