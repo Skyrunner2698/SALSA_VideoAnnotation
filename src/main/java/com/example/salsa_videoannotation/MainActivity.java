@@ -26,9 +26,11 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
     private static int REQUEST_CODE = 124352;
     BottomNavigationView bottomNav;
-    static ArrayList<VideoFiles> videoFiles = new ArrayList<>();
-    static ArrayList<String> folderList = new ArrayList<>();
+    public static ArrayList<VideoFiles> quizVideos = new ArrayList<>();
+    public static ArrayList<VideoFiles> feedbackVideos = new ArrayList<>();
     static HashMap<String, Annotations> annotationWrapperList = new HashMap<>();
+    private static String FEEDBACK_FOLDER_NAME = "Feedback";
+    private static String QUIZ_FOLDER_NAME = "Quiz";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +43,25 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId())
                 {
-                    case R.id.folderList:
-                        Toast.makeText(MainActivity.this, "Folder", Toast.LENGTH_SHORT).show();
+                    case R.id.studentQuiz:
+                        Toast.makeText(MainActivity.this, "Quiz", Toast.LENGTH_SHORT).show();
                         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.mainFragment, new FolderFragment());
+                                .replace(R.id.mainFragment, new QuizVideoFragment(VideoAdapter.VIDEO_TYPE_QUIZ));
                         fragmentTransaction.commit();
                         item.setChecked(true);
                         break;
-                    case R.id.filesList:
-                        Toast.makeText(MainActivity.this, "Files", Toast.LENGTH_SHORT).show();
+                    case R.id.feedbackCreation:
+                        Toast.makeText(MainActivity.this, "Feedback Creation", Toast.LENGTH_SHORT).show();
                         FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.mainFragment, new FilesFragment());
+                                .replace(R.id.mainFragment, new FeedbackVideosFragment());
                         fragmentTransaction2.commit();
+                        item.setChecked(true);
+                        break;
+                    case R.id.quizCreation:
+                        Toast.makeText(MainActivity.this, "Quiz Creation", Toast.LENGTH_SHORT).show();
+                        FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.mainFragment, new QuizVideoFragment(VideoAdapter.VIDEO_TYPE_QUIZ_CREATION));
+                        fragmentTransaction3.commit();
                         item.setChecked(true);
                         break;
                 }
@@ -68,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-            videoFiles = getAllVideos(this);
+            getAllVideos(this);
             annotationWrapperList = StorageModule.loadXML(this);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.mainFragment, new FolderFragment());
+                    .replace(R.id.mainFragment, new QuizVideoFragment(VideoAdapter.VIDEO_TYPE_QUIZ));
             fragmentTransaction.commit();
         }
     }
@@ -84,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                videoFiles = getAllVideos(this);
+                getAllVideos(this);
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mainFragment, new FolderFragment());
+                        .replace(R.id.mainFragment, new QuizVideoFragment(VideoAdapter.VIDEO_TYPE_QUIZ));
                 fragmentTransaction.commit();
             }
             else
@@ -96,9 +105,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<VideoFiles> getAllVideos(Context context)
+    public void getAllVideos(Context context)
     {
-        ArrayList<VideoFiles> tempVideoFiles = new ArrayList<>();
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
                 MediaStore.Video.Media._ID,
@@ -123,15 +131,19 @@ public class MainActivity extends AppCompatActivity {
                 String duration = HelperTool.createTimeRepresentation(cursor.getInt(5));
                 String fileName = cursor.getString(6);
                 VideoFiles videoFiles = new VideoFiles(id, path, title, fileName, size, dateAdded, duration);
-                Log.e("Path", path);
+
+
                 int slashFirstIndex = path.lastIndexOf("/");
                 String subString = path.substring(0, slashFirstIndex);
-                if(!folderList.contains(subString))
-                    folderList.add(subString);
-                tempVideoFiles.add(videoFiles);
+                int index = subString.lastIndexOf("/");
+                String folder = subString.substring(index + 1);
+
+                if(folder.equals(FEEDBACK_FOLDER_NAME))
+                    feedbackVideos.add(videoFiles);
+                else if (folder.equals(QUIZ_FOLDER_NAME))
+                    quizVideos.add(videoFiles);
             }
             cursor.close();
         }
-        return tempVideoFiles;
     }
 }

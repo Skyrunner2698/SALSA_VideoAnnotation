@@ -33,4 +33,16 @@
         app:layout_constraintStart_toEndOf="@id/annotation_card_thumbnail"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:id="@+id/annotation_card_more"
+        android:src="@drawable/ic_baseline_more_vert"
+        android:onClick="showAnnotationPopUpMenu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/annotation_feedback_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

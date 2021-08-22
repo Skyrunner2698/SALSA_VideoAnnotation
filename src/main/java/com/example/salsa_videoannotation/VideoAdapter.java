@@ -17,13 +17,18 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder> {
+    public static final int VIDEO_TYPE_FEEDBACK = 0;
+    public static final int VIDEO_TYPE_QUIZ = 1;
+    public static final int VIDEO_TYPE_QUIZ_CREATION = 2;
     private Context mContext;
     static ArrayList<VideoFiles> videoFiles;
     View view;
+    private int videoType;
 
-    public VideoAdapter(Context mContext, ArrayList<VideoFiles> videoFiles) {
+    public VideoAdapter(Context mContext, ArrayList<VideoFiles> videoFiles, int videoType) {
         this.mContext = mContext;
         this.videoFiles = videoFiles;
+        this.videoType = videoType;
     }
 
     @NonNull
@@ -43,7 +48,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PlayerActivity.class);
                 intent.putExtra("position", position);
-                intent.putExtra("sender", "FileIsSending");
+                intent.putExtra("sender", videoType);
                 mContext.startActivity(intent);
             }
         });

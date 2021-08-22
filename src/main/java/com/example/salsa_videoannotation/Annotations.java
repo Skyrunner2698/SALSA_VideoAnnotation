@@ -20,6 +20,8 @@ public class Annotations
     public static final int DELETE_TRANSACTION = 3;
     public static final int PLACEHOLDER_VIDEO_ANNOTATION_ID = 0;
     public static final String PLACEHOLDER_VIDEOFILE_PATH = "Holder";
+    public static final int DELETE_WRAPPER_ID_KEY = 0;
+    public static final int DELETE_ANNOTATION_ID_KEY = 1;
     @Attribute
     private String id;
     @Element
@@ -40,36 +42,33 @@ public class Annotations
         this.videoFilePath = videoFilePath;
     }
 
-    public void handleAnnotationManipulation(int transactionType, int videoAnnotationId, long startTime, long endTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail)
+    public void handleAnnotationManipulation(int transactionType, int videoAnnotationId, long startTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail, QuizQuestion quizQuestion)
     {
         switch (transactionType)
         {
             case CREATE_TRANSACTION:
-                addNewAnnotation(startTime, endTime, category, bodyPart, content, annotationThumbnail);
+                addNewAnnotation(startTime, category, bodyPart, content, annotationThumbnail, quizQuestion);
                 break;
             case UPDATE_TRANSACTION:
-                updateAnnotation(videoAnnotationId, startTime, endTime, category, bodyPart, content, annotationThumbnail);
-                break;
-            case DELETE_TRANSACTION:
-                deleteAnnotation();
+                updateAnnotation(videoAnnotationId, startTime, category, bodyPart, content, annotationThumbnail, quizQuestion);
                 break;
         }
     }
 
-    private void deleteAnnotation()
+    public void deleteAnnotation(int annotationId)
     {
-
+        videoAnnotationsMap.remove(annotationId);
     }
 
-    private void updateAnnotation(int annotationId, long startTime, long endTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail)
+    private void updateAnnotation(int annotationId, long startTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail, QuizQuestion quizQuestion)
     {
-        AnnotationData updatedAnnotation = new AnnotationData(annotationId, startTime, endTime, category, bodyPart, content, annotationThumbnail);
+        AnnotationData updatedAnnotation = new AnnotationData(annotationId, startTime, category, bodyPart, content, quizQuestion, annotationThumbnail);
         videoAnnotationsMap.replace(annotationId, updatedAnnotation);
     }
 
-    private void addNewAnnotation(long startTime, long endTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail)
+    private void addNewAnnotation(long startTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail, QuizQuestion quizQuestion)
     {
-        AnnotationData newAnnotation = new AnnotationData(videoAnnotationsMap.size() + 1, startTime, endTime, category, bodyPart, content, annotationThumbnail);
+        AnnotationData newAnnotation = new AnnotationData(videoAnnotationsMap.size() + 1, startTime, category, bodyPart, content, quizQuestion, annotationThumbnail);
         videoAnnotationsMap.put(newAnnotation.getId(), newAnnotation);
     }
 

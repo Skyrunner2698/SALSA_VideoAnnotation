@@ -129,4 +129,11 @@ public class StorageModule
         }
         return true;
     }
+
+    public static boolean deleteAnnotationThumbnail(Context context, String annotationWrapperId, int annotationId)
+    {
+        String filepath = getPrimaryExternalStorageVolume(context) + "/" + THUMBNAIL_FOLDER_NAME_PREFIX + annotationWrapperId + "/" + annotationId + THUMBNAIL_EXTENSION;
+        File imageFile = new File(filepath);
+        return imageFile.delete();
+    }
 }

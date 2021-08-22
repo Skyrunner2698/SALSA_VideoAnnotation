@@ -2,13 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="Folders"
-        android:id="@+id/folderList"
+        android:title="Student Quiz"
+        android:id="@+id/studentQuiz"
         android:icon="@drawable/ic_baseline_folder"
         app:showAsAction="ifRoom"/>
     <item
-        android:title="Files"
-        android:id="@+id/filesList"
+        android:title="Feedback Creation"
+        android:id="@+id/feedbackCreation"
+        android:icon="@drawable/ic_baseline_filter_list_file"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:title="Quiz Creation"
+        android:id="@+id/quizCreation"
         android:icon="@drawable/ic_baseline_filter_list_file"
         app:showAsAction="ifRoom"/>
 

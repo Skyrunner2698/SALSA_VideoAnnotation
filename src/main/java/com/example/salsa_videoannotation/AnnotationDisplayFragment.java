@@ -1,32 +1,33 @@
 package com.example.salsa_videoannotation;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import java.util.ArrayList;
-
 
 
 public class AnnotationDisplayFragment extends Fragment {
 
+    public static final int ANNOTATION_QUIZ_TYPE = 0;
+    public static final int ANNOTATION_FEEDBACK_TYPE = 1;
     AnnotationDisplayAdapter annotationDisplayAdapter;
     RecyclerView recyclerView;
     Annotations annotationsWrapper;
+    private int displayType;
 
     public AnnotationDisplayFragment() {
         // Required empty public constructor
     }
 
-    public AnnotationDisplayFragment(Annotations annotationsWrapper)
+    public AnnotationDisplayFragment(Annotations annotationsWrapper, int displayType)
     {
         this.annotationsWrapper = annotationsWrapper;
+        this.displayType = displayType;
     }
 
 
@@ -38,7 +39,7 @@ public class AnnotationDisplayFragment extends Fragment {
         recyclerView = view.findViewById(R.id.annotation_display_RV);
         if(annotationsWrapper.getVideoAnnotationsMap() != null && annotationsWrapper.getVideoAnnotationsMap().size() > 0)
         {
-            annotationDisplayAdapter = new AnnotationDisplayAdapter(getContext(), annotationsWrapper);
+            annotationDisplayAdapter = new AnnotationDisplayAdapter(getContext(), annotationsWrapper, displayType);
             recyclerView.setAdapter(annotationDisplayAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         }

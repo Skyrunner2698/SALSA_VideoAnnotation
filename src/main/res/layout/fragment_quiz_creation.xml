@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/annotation_controls_fragment"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AnnotationDetailsFragment">
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".QuizCreationFragment">
 
     <TextView
         android:id="@+id/start_time_label"
@@ -106,24 +110,88 @@
 
 
     <EditText
-        android:id="@+id/annotation_content"
+        android:id="@+id/annotation_question"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:overScrollMode="always"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:hint="Enter Annotation Text"
+        android:hint="Enter the quiz question"
         android:gravity="top|left"
         android:textColor="@color/PrimaryText"
         android:textColorHint="@color/SecondaryText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bodypartBottomDivider"
-        app:layout_constraintBottom_toTopOf="@+id/save_button"/>
+        app:layout_constraintBottom_toTopOf="@+id/annotation_correct_answer"/>
+
+    <EditText
+        android:id="@+id/annotation_correct_answer"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:overScrollMode="always"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="Enter the correct answer"
+        android:gravity="top|left"
+        android:textColor="@color/PrimaryText"
+        android:textColorHint="@color/SecondaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_question"
+        app:layout_constraintBottom_toTopOf="@+id/annotation_answer_1"/>
+
+    <EditText
+        android:id="@+id/annotation_answer_1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:overScrollMode="always"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="Enter an incorrect answer"
+        android:gravity="top|left"
+        android:textColor="@color/PrimaryText"
+        android:textColorHint="@color/SecondaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_correct_answer"
+        app:layout_constraintBottom_toTopOf="@+id/annotation_answer_2"/>
+
+    <EditText
+        android:id="@+id/annotation_answer_2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:overScrollMode="always"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="Enter an incorrect answer"
+        android:gravity="top|left"
+        android:textColor="@color/PrimaryText"
+        android:textColorHint="@color/SecondaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_answer_1"
+        app:layout_constraintBottom_toTopOf="@+id/annotation_answer_3"/>
+
+    <EditText
+        android:id="@+id/annotation_answer_3"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:overScrollMode="always"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="Enter an incorrect answer"
+        android:gravity="top|left"
+        android:textColor="@color/PrimaryText"
+        android:textColorHint="@color/SecondaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_answer_2"
+        app:layout_constraintBottom_toTopOf="@+id/save_button_quiz"/>
 
 
     <Button
-        android:id="@+id/save_button"
+        android:id="@+id/save_button_quiz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -134,27 +202,27 @@
         android:text="@string/save"
         android:onClick="onSaveAnnotationButtonClick"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/back_button"
+        app:layout_constraintEnd_toStartOf="@id/back_button_quiz"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/annotation_content"
+        app:layout_constraintTop_toBottomOf="@id/annotation_answer_3"
         app:layout_constraintVertical_bias="1.0"
-        tools:ignore="OnClick" />
+         />
 
     <Button
-        android:id="@+id/back_button"
+        android:id="@+id/back_button_quiz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_toRightOf="@id/save_button"
+        android:layout_toRightOf="@id/save_button_quiz"
         android:background="@color/Menus"
         android:text="@string/back"
         android:onClick="onBackButtonClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/save_button"
-        app:layout_constraintTop_toBottomOf="@id/annotation_content"
+        app:layout_constraintStart_toEndOf="@id/save_button_quiz"
+        app:layout_constraintTop_toBottomOf="@id/annotation_answer_3"
         app:layout_constraintVertical_bias="1.0"/>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

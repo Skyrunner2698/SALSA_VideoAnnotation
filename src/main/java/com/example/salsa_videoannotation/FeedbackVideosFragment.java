@@ -9,27 +9,26 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.example.salsa_videoannotation.MainActivity.folderList;
-import static com.example.salsa_videoannotation.MainActivity.videoFiles;
+import static com.example.salsa_videoannotation.MainActivity.feedbackVideos;
 
-public class FolderFragment extends Fragment {
+public class FeedbackVideosFragment extends Fragment {
 
-    FolderAdapter folderAdapter;
     RecyclerView recyclerView;
-    public FolderFragment() {
+    View view;
+    com.example.salsa_videoannotation.VideoAdapter videoAdapter;
+    public FeedbackVideosFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_folder, container, false);
-        recyclerView = view.findViewById(R.id.folderRV);
-        if(folderList != null && folderList.size() > 0 && videoFiles != null)
+        view = inflater.inflate(R.layout.fragment_feedback_video_list, container, false);
+        recyclerView = view.findViewById(R.id.feedbackRV);
+        if(feedbackVideos != null && feedbackVideos.size() > 0)
         {
-            folderAdapter = new FolderAdapter(folderList, videoFiles, getContext());
-            recyclerView.setAdapter(folderAdapter);
+            videoAdapter = new com.example.salsa_videoannotation.VideoAdapter(getContext(), feedbackVideos, VideoAdapter.VIDEO_TYPE_FEEDBACK);
+            recyclerView.setAdapter(videoAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         }
         return view;
