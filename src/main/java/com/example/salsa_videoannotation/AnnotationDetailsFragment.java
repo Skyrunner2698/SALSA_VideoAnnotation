@@ -7,10 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import java.util.Optional;
@@ -23,7 +27,7 @@ public class AnnotationDetailsFragment extends Fragment
     private MultiSelectionSpinner bodypartMultiSelectSpinner;
     private EditText content;
     private Button save;
-    private EditText startTime;
+    private TextView startTime;
     private PlayerActivity playerActivity;
     private Annotations currentAnnotationWrapper;
     private AnnotationData currentAnnotation;
@@ -44,6 +48,14 @@ public class AnnotationDetailsFragment extends Fragment
         save = view.findViewById(R.id.save_button);
         startTime = view.findViewById(R.id.start_time);
         playerActivity = (PlayerActivity) getActivity();
+
+        ImageView createAnnotation = playerActivity.findViewById(R.id.new_annotation);
+        createAnnotation.setVisibility(View.INVISIBLE);
+        ConstraintLayout parentLayout = playerActivity.findViewById(R.id.parent_layout);
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(parentLayout);
+        constraintSet.connect(R.id.annotation_section, ConstraintSet.TOP, R.id.exoplayer_dance, ConstraintSet.BOTTOM);
+        constraintSet.applyTo(parentLayout);
         Bundle bundle = this.getArguments();
         if(bundle != null)
         {
@@ -88,7 +100,7 @@ public class AnnotationDetailsFragment extends Fragment
             saveAnnotation(annotations, annotationThumbnail);
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotations,
-                            AnnotationDisplayFragment.ANNOTATION_FEEDBACK_TYPE)).commit();
+                            VideoAdapter.VIDEO_TYPE_FEEDBACK)).commit();
         }
         else
         {
@@ -113,7 +125,7 @@ public class AnnotationDetailsFragment extends Fragment
             currentAnnotation = currentAnnotationWrapper.getVideoAnnotationsMap().get(currentAnnotation.getId());
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
-                            AnnotationDisplayFragment.ANNOTATION_FEEDBACK_TYPE)).commit();
+                            VideoAdapter.VIDEO_TYPE_FEEDBACK)).commit();
         }
         else
         {
@@ -156,7 +168,7 @@ public class AnnotationDetailsFragment extends Fragment
             Toast.makeText(getContext(), "Delete Annotation", Toast.LENGTH_SHORT).show();
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
-                            AnnotationDisplayFragment.ANNOTATION_FEEDBACK_TYPE)).commit();
+                            VideoAdapter.VIDEO_TYPE_FEEDBACK)).commit();
         }
         else
         {
@@ -168,7 +180,7 @@ public class AnnotationDetailsFragment extends Fragment
     {
         if (categoryMultiSelectSpinner.getSelectedStrings().size() == 0 ||
         bodypartMultiSelectSpinner.getSelectedStrings().size() == 0 ||
-        content.getText().equals(""))
+        content.getText().toString().equals(""))
             return false;
         else
             return true;

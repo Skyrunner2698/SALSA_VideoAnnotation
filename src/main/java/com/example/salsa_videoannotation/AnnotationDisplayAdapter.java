@@ -74,9 +74,16 @@ public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDis
                     FragmentManager manager = ((PlayerActivity) mContext).getSupportFragmentManager();
                     manager.beginTransaction().replace(R.id.annotation_section, fragment).commit();
                 }
-                else
+                else if(displayType == VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)
                 {
                     QuizCreationFragment fragment = new QuizCreationFragment();
+                    fragment.setArguments(bundle);
+                    FragmentManager manager = ((PlayerActivity) mContext).getSupportFragmentManager();
+                    manager.beginTransaction().replace(R.id.annotation_section, fragment).commit();
+                }
+                else if(displayType == VideoAdapter.VIDEO_TYPE_QUIZ)
+                {
+                    QuizAnsweringFragment fragment = new QuizAnsweringFragment();
                     fragment.setArguments(bundle);
                     FragmentManager manager = ((PlayerActivity) mContext).getSupportFragmentManager();
                     manager.beginTransaction().replace(R.id.annotation_section, fragment).commit();
@@ -90,17 +97,16 @@ public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDis
         return annotations.size();
     }
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder
     {
-        ImageView thumbNail, menuMore;
+        ImageView thumbNail;
         TextView fileName;
         public MyViewHolder(@NonNull View itemView)
         {
             super(itemView);
             thumbNail = itemView.findViewById(R.id.annotation_thumbnail);
             fileName = itemView.findViewById(R.id.annotation_feedback_name);
-            menuMore = itemView.findViewById(R.id.annotation_card_more);
-            menuMore.setOnClickListener(this::onDeleteClick);
         }
 
         public void onDeleteClick(View view)

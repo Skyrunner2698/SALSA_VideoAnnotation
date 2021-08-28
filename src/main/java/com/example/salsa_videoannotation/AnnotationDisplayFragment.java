@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class AnnotationDisplayFragment extends Fragment {
-
-    public static final int ANNOTATION_QUIZ_TYPE = 0;
-    public static final int ANNOTATION_FEEDBACK_TYPE = 1;
     AnnotationDisplayAdapter annotationDisplayAdapter;
     RecyclerView recyclerView;
     Annotations annotationsWrapper;
@@ -37,6 +37,19 @@ public class AnnotationDisplayFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_annotation_display, container, false);
         recyclerView = view.findViewById(R.id.annotation_display_RV);
+
+
+        if (displayType != VideoAdapter.VIDEO_TYPE_QUIZ) {
+            PlayerActivity playerActivity = (PlayerActivity) getActivity();
+            ImageView createAnnotation = playerActivity.findViewById(R.id.new_annotation);
+            createAnnotation.setVisibility(View.VISIBLE);
+            ConstraintLayout parentLayout = playerActivity.findViewById(R.id.parent_layout);
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(parentLayout);
+            constraintSet.connect(R.id.annotation_section, ConstraintSet.TOP, R.id.new_annotation, ConstraintSet.BOTTOM);
+            constraintSet.applyTo(parentLayout);
+        }
+
         if(annotationsWrapper.getVideoAnnotationsMap() != null && annotationsWrapper.getVideoAnnotationsMap().size() > 0)
         {
             annotationDisplayAdapter = new AnnotationDisplayAdapter(getContext(), annotationsWrapper, displayType);

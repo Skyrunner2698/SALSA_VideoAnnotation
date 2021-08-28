@@ -15,30 +15,31 @@
         android:id="@+id/start_time_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/start_time"
+        android:textSize="20dp"
         android:textColor="@color/PrimaryText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/start_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="5dp"
-        android:text="03:10"
         android:textColor="@color/PrimaryText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/start_time_label" />
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/start_time_label"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/category_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:text="@string/category_label"
         android:textColor="@color/PrimaryText"
         android:textSize="20dp"
@@ -198,7 +199,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/Menus"
+        android:backgroundTint="@color/Button"
         android:text="@string/save"
         android:onClick="onSaveAnnotationButtonClick"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -215,7 +216,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_toRightOf="@id/save_button_quiz"
-        android:background="@color/Menus"
+        android:backgroundTint="@color/Button"
         android:text="@string/back"
         android:onClick="onBackButtonClick"
         app:layout_constraintBottom_toBottomOf="parent"

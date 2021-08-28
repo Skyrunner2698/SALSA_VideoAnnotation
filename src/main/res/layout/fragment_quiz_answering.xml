@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".QuizAnsweringFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/question_display"
+        android:text="Hello for now"
+        android:layout_margin="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="@color/PrimaryText"/>
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:id="@+id/answer_button_1"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="20sp"
+        android:backgroundTint="@color/Button"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@+id/question_display"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/answer_button_2"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="10dp"/>
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:id="@+id/answer_button_2"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="20sp"
+        android:backgroundTint="@color/Button"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@+id/question_display"
+        app:layout_constraintStart_toEndOf="@id/answer_button_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="10dp"/>
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:id="@+id/answer_button_3"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="20sp"
+        android:backgroundTint="@color/Button"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@+id/answer_button_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/answer_button_4"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:id="@+id/answer_button_4"
+        android:backgroundTint="@color/Button"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="20sp"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@+id/answer_button_2"
+        app:layout_constraintStart_toEndOf="@id/answer_button_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp" />
+
+
+    <Button
+        android:id="@+id/hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/Button"
+        android:text="@string/hint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/back_button_quiz"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/answer_button_3"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/back_button_quiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/hint"
+        android:backgroundTint="@color/Button"
+        android:text="@string/back"
+        android:onClick="onBackButtonClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/hint"
+        app:layout_constraintTop_toBottomOf="@id/answer_button_4"
+        app:layout_constraintVertical_bias="1.0"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SALSA_VideoAnnotation">
-        <activity android:name=".VideoFolderActivity"></activity>
         <activity android:name=".PlayerActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

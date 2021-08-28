@@ -25,12 +25,12 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     private static int REQUEST_CODE = 124352;
-    BottomNavigationView bottomNav;
+    private BottomNavigationView bottomNav;
     public static ArrayList<VideoFiles> quizVideos = new ArrayList<>();
     public static ArrayList<VideoFiles> feedbackVideos = new ArrayList<>();
     static HashMap<String, Annotations> annotationWrapperList = new HashMap<>();
-    private static String FEEDBACK_FOLDER_NAME = "Feedback";
-    private static String QUIZ_FOLDER_NAME = "Quiz";
+    private static final String FEEDBACK_FOLDER_NAME = "Feedback";
+    private static final String QUIZ_FOLDER_NAME = "Quiz";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +44,18 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId())
                 {
                     case R.id.studentQuiz:
-                        Toast.makeText(MainActivity.this, "Quiz", Toast.LENGTH_SHORT).show();
                         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.mainFragment, new QuizVideoFragment(VideoAdapter.VIDEO_TYPE_QUIZ));
                         fragmentTransaction.commit();
                         item.setChecked(true);
                         break;
                     case R.id.feedbackCreation:
-                        Toast.makeText(MainActivity.this, "Feedback Creation", Toast.LENGTH_SHORT).show();
                         FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.mainFragment, new FeedbackVideosFragment());
                         fragmentTransaction2.commit();
                         item.setChecked(true);
                         break;
                     case R.id.quizCreation:
-                        Toast.makeText(MainActivity.this, "Quiz Creation", Toast.LENGTH_SHORT).show();
                         FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.mainFragment, new QuizVideoFragment(VideoAdapter.VIDEO_TYPE_QUIZ_CREATION));
                         fragmentTransaction3.commit();

@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
@@ -20,7 +24,7 @@ public class QuizCreationFragment extends Fragment {
     private MultiSelectionSpinner categoryMultiSelectSpinner;
     private MultiSelectionSpinner bodypartMultiSelectSpinner;
     private Button save;
-    private EditText startTime;
+    private TextView startTime;
     private EditText question;
     private EditText correctAnswer;
     private EditText answer1;
@@ -51,6 +55,17 @@ public class QuizCreationFragment extends Fragment {
         answer2 = view.findViewById(R.id.annotation_answer_2);
         answer3 = view.findViewById(R.id.annotation_answer_3);
         playerActivity = (PlayerActivity) getActivity();
+
+
+        ImageView createAnnotation = playerActivity.findViewById(R.id.new_annotation);
+        createAnnotation.setVisibility(View.INVISIBLE);
+        ConstraintLayout parentLayout = playerActivity.findViewById(R.id.parent_layout);
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(parentLayout);
+        constraintSet.connect(R.id.annotation_section, ConstraintSet.TOP, R.id.exoplayer_dance, ConstraintSet.BOTTOM);
+        constraintSet.applyTo(parentLayout);
+
+
         Bundle bundle = this.getArguments();
         if(bundle != null)
         {
@@ -100,7 +115,7 @@ public class QuizCreationFragment extends Fragment {
             saveAnnotation(annotations, annotationThumbnail);
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotations,
-                            AnnotationDisplayFragment.ANNOTATION_FEEDBACK_TYPE)).commit();
+                           VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)).commit();
         }
         else
         {
@@ -126,7 +141,7 @@ public class QuizCreationFragment extends Fragment {
             currentAnnotation = currentAnnotationWrapper.getVideoAnnotationsMap().get(currentAnnotation.getId());
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
-                            AnnotationDisplayFragment.ANNOTATION_FEEDBACK_TYPE)).commit();
+                            VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)).commit();
         }
         else
         {
@@ -169,7 +184,7 @@ public class QuizCreationFragment extends Fragment {
             Toast.makeText(getContext(), "Delete Annotation", Toast.LENGTH_SHORT).show();
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
-                            AnnotationDisplayFragment.ANNOTATION_FEEDBACK_TYPE)).commit();
+                            VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)).commit();
         }
         else
         {
@@ -181,8 +196,8 @@ public class QuizCreationFragment extends Fragment {
     {
         if (categoryMultiSelectSpinner.getSelectedStrings().size() == 0 ||
                 bodypartMultiSelectSpinner.getSelectedStrings().size() == 0 ||
-                question.getText().equals("") || correctAnswer.getText().equals("") ||
-            answer1.getText().equals("") || answer2.getText().equals("") || answer3.getText().equals(""))
+                question.getText().toString().equals("") || correctAnswer.getText().toString().equals("") ||
+            answer1.getText().toString().equals("") || answer2.getText().toString().equals("") || answer3.getText().toString().equals(""))
             return false;
         else
             return true;

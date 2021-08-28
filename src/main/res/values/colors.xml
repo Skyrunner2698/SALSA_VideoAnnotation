@@ -11,6 +11,10 @@
     <color name = "colorPrimaryDark">#100F0F</color>
     <color name="DarkMode">#181818</color>
     <color name="Menus">#212121</color>
+    <color name="Button">#3D3D3D</color>
     <color name="PrimaryText">#FFFFFF</color>
     <color name="SecondaryText">#AAAAAA</color>
+    <color name="AnswerCorrect">#4CAF50</color>
+    <color name="AnswerIncorrect">#D1281B</color>
+    <color name="SelectedHighlight">#F3DADA</color>
 </resources>

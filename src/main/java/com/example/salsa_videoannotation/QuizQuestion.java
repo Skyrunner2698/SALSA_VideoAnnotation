@@ -17,6 +17,11 @@ public class QuizQuestion
     @Element
     private String answer3;
 
+    public QuizQuestion()
+    {
+        
+    }
+
     public QuizQuestion(String question, String correctAnswer, String answer1, String answer2, String answer3) {
         this.question = question;
         this.correctAnswer = correctAnswer;

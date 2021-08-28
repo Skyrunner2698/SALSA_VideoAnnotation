@@ -23,6 +23,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.salsa_videoannotation.VideoAdapter.videoFiles;
 
@@ -32,6 +34,8 @@ public class PlayerActivity extends AppCompatActivity {
     public int position = -1;
     public ArrayList<VideoFiles> myFiles = new ArrayList<>();
     public int displayType;
+    private Annotations annotationsForDisplay;
+    public static HashMap<Integer, QuizAnswers> answersHashMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,9 @@ public class PlayerActivity extends AppCompatActivity {
             playerView.setKeepScreenOn(true);
             simpleExoPlayer.prepare(mediaSource);
 
+            // creating the annotation display fragment for the current videofile selected
+            annotationsForDisplay = HelperTool.getAnnotationByVideoId(myFiles.get(position).getId());
+
             if (displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK)
             {
                 simpleExoPlayer.setPlayWhenReady(true);
@@ -73,6 +80,7 @@ public class PlayerActivity extends AppCompatActivity {
                 constraintSet.clone(parentLayout);
                 constraintSet.connect(R.id.annotation_section, ConstraintSet.TOP, R.id.exoplayer_dance, ConstraintSet.BOTTOM);
                 constraintSet.applyTo(parentLayout);
+                setUpHashMapAnswers();
             }
             else if (displayType == VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)
             {
@@ -82,7 +90,6 @@ public class PlayerActivity extends AppCompatActivity {
             }
 
             // creating the annotation display fragment for the current videofile selected
-            Annotations annotationsForDisplay = HelperTool.getAnnotationByVideoId(myFiles.get(position).getId());
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotationsForDisplay,
                             displayType)).commit();
@@ -159,6 +166,15 @@ public class PlayerActivity extends AppCompatActivity {
             simpleExoPlayer.setPlayWhenReady(true);
         }
     };
+
+    private void setUpHashMapAnswers()
+    {
+        for(Map.Entry mapElement : annotationsForDisplay.getVideoAnnotationsMap().entrySet())
+        {
+            AnnotationData annotation = (AnnotationData) mapElement.getValue();
+            answersHashMap.put(annotation.getId(), new QuizAnswers(QuizAnsweringFragment.UNANSWERED));
+        }
+    }
 
 //    public void showAnnotationPopUpMenu(View view)
 //    {
