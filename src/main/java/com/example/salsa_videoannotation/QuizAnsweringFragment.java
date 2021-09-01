@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
 import static com.example.salsa_videoannotation.PlayerActivity.answersHashMap;
 
+import java.util.concurrent.TimeUnit;
+
 public class QuizAnsweringFragment extends Fragment {
     private TextView question;
     private Button answer1;
@@ -145,7 +147,6 @@ public class QuizAnsweringFragment extends Fragment {
 
     public void onCorrectAnswerClick(View view)
     {
-        Toast.makeText(getContext(), "Correct", Toast.LENGTH_SHORT).show();
         doCorrectAnswerButtonChanges();
         QuizAnswers quizAnswers = answersHashMap.get(currentAnnotation.getId());
         quizAnswers.setAnswerText(correctAnswer.getText().toString());
@@ -155,7 +156,6 @@ public class QuizAnsweringFragment extends Fragment {
 
     public void onIncorrectAnswerClick(View view)
     {
-        Toast.makeText(getContext(), "Incorrect", Toast.LENGTH_SHORT).show();
         QuizAnswers quizAnswers = answersHashMap.get(currentAnnotation.getId());
         quizAnswers.setAnswerStatus(ANSWER_INCORRECT);
         Button tempButton = new Button(getContext());
@@ -181,11 +181,21 @@ public class QuizAnsweringFragment extends Fragment {
     {
         correctAnswer.setBackgroundColor(getResources().getColor(R.color.AnswerCorrect, null));
         correctAnswer.setHighlightColor(getResources().getColor(R.color.SelectedHighlight, null));
+        makeAnswerButtonsUnclickable();
     }
 
     private void doIncorrectAnswerButtonChanges(Button tempButton)
     {
         tempButton.setBackgroundColor(getResources().getColor(R.color.AnswerIncorrect, null));
         tempButton.setHighlightColor(getResources().getColor(R.color.SelectedHighlight, null));
+        doCorrectAnswerButtonChanges();
+    }
+
+    private void makeAnswerButtonsUnclickable()
+    {
+        correctAnswer.setClickable(false);
+        answer1.setClickable(false);
+        answer2.setClickable(false);
+        answer3.setClickable(false);
     }
 }

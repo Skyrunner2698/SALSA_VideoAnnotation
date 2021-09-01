@@ -7,9 +7,16 @@
     <string name="end_time">End Time</string>
     <string name="save">Save</string>
     <string name="back">Back</string>
-    <string name="delete_annotation">Delete Annotation</string>
+    <string name="delete_annotation">Delete</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="feedback_creation_heading">Feedback Creation</string>
     <string name="hint">Hint</string>
+    <string name="feedback_view_heading">View Feedback</string>
+    <string name="create_feedback_btm_nav">Create Feedback</string>
+    <string name="create_quiz_btm_nav">Create Quiz</string>
+    <string name="view_feedback_btm_nav">Feedback</string>
+    <string name="view_quiz_btm_nav">Quiz</string>
+    <string name="annotation_content_label">Feedback Notes</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

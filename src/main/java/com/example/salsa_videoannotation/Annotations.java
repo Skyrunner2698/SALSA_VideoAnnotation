@@ -11,17 +11,15 @@ import org.simpleframework.xml.Root;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Root
 public class Annotations
 {
     public static final int CREATE_TRANSACTION = 1;
     public static final int UPDATE_TRANSACTION = 2;
-    public static final int DELETE_TRANSACTION = 3;
-    public static final int PLACEHOLDER_VIDEO_ANNOTATION_ID = 0;
     public static final String PLACEHOLDER_VIDEOFILE_PATH = "Holder";
-    public static final int DELETE_WRAPPER_ID_KEY = 0;
-    public static final int DELETE_ANNOTATION_ID_KEY = 1;
     @Attribute
     private String id;
     @Element
@@ -47,7 +45,7 @@ public class Annotations
         switch (transactionType)
         {
             case CREATE_TRANSACTION:
-                addNewAnnotation(startTime, category, bodyPart, content, annotationThumbnail, quizQuestion);
+                addNewAnnotation(videoAnnotationId, startTime, category, bodyPart, content, annotationThumbnail, quizQuestion);
                 break;
             case UPDATE_TRANSACTION:
                 updateAnnotation(videoAnnotationId, startTime, category, bodyPart, content, annotationThumbnail, quizQuestion);
@@ -66,9 +64,9 @@ public class Annotations
         videoAnnotationsMap.replace(annotationId, updatedAnnotation);
     }
 
-    private void addNewAnnotation(long startTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail, QuizQuestion quizQuestion)
+    private void addNewAnnotation(int newAnnotationId, long startTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail, QuizQuestion quizQuestion)
     {
-        AnnotationData newAnnotation = new AnnotationData(videoAnnotationsMap.size() + 1, startTime, category, bodyPart, content, quizQuestion, annotationThumbnail);
+        AnnotationData newAnnotation = new AnnotationData(newAnnotationId, startTime, category, bodyPart, content, quizQuestion, annotationThumbnail);
         videoAnnotationsMap.put(newAnnotation.getId(), newAnnotation);
     }
 

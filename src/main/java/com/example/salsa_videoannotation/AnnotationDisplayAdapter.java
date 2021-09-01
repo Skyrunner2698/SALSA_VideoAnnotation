@@ -53,12 +53,13 @@ public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDis
         // assigns the filename for annotation items using startTime and a Feedback and number naming system
         long startTime = annotations.get(position).getStartTime();
         String time = HelperTool.createTimeRepresentation(startTime);
-        if(displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK)
+        if(displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK || displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK_VIEWING)
             holder.fileName.setText(time + " - Feedback " + (position + 1));
         else
             holder.fileName.setText(time + " - Question " + (position + 1));
         // Thumbnail for annotation is set using glide and a bitmap image stored on the annotationData object
         Glide.with(mContext).load(annotations.get(position).getThumbnail()).into(holder.thumbNail);
+        holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.Menus, null));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,14 +70,14 @@ public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDis
                 bundle.putString("annotationWrapperId", annotationWrapper.getId());
 
                 if(displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK) {
-                    AnnotationDetailsFragment fragment = new AnnotationDetailsFragment();
+                    AnnotationDetailsFragmentEditing fragment = new AnnotationDetailsFragmentEditing();
                     fragment.setArguments(bundle);
                     FragmentManager manager = ((PlayerActivity) mContext).getSupportFragmentManager();
                     manager.beginTransaction().replace(R.id.annotation_section, fragment).commit();
                 }
                 else if(displayType == VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)
                 {
-                    QuizCreationFragment fragment = new QuizCreationFragment();
+                    QuizCreationFragmentEditing fragment = new QuizCreationFragmentEditing();
                     fragment.setArguments(bundle);
                     FragmentManager manager = ((PlayerActivity) mContext).getSupportFragmentManager();
                     manager.beginTransaction().replace(R.id.annotation_section, fragment).commit();
@@ -84,6 +85,13 @@ public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDis
                 else if(displayType == VideoAdapter.VIDEO_TYPE_QUIZ)
                 {
                     QuizAnsweringFragment fragment = new QuizAnsweringFragment();
+                    fragment.setArguments(bundle);
+                    FragmentManager manager = ((PlayerActivity) mContext).getSupportFragmentManager();
+                    manager.beginTransaction().replace(R.id.annotation_section, fragment).commit();
+                }
+                else if(displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK_VIEWING)
+                {
+                    ViewFeedbackFragment fragment = new ViewFeedbackFragment();
                     fragment.setArguments(bundle);
                     FragmentManager manager = ((PlayerActivity) mContext).getSupportFragmentManager();
                     manager.beginTransaction().replace(R.id.annotation_section, fragment).commit();

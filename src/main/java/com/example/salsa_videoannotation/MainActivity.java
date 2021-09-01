@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.feedbackCreation:
                         FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.mainFragment, new FeedbackVideosFragment());
+                                .replace(R.id.mainFragment, new FeedbackVideosFragment(VideoAdapter.VIDEO_TYPE_FEEDBACK));
                         fragmentTransaction2.commit();
                         item.setChecked(true);
                         break;
@@ -59,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
                         FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.mainFragment, new QuizVideoFragment(VideoAdapter.VIDEO_TYPE_QUIZ_CREATION));
                         fragmentTransaction3.commit();
+                        item.setChecked(true);
+                        break;
+                    case R.id.viewFeedback:
+                        FragmentTransaction fragmentTransaction4 = getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.mainFragment, new FeedbackVideosFragment(VideoAdapter.VIDEO_TYPE_FEEDBACK_VIEWING));
+                        fragmentTransaction4.commit();
                         item.setChecked(true);
                         break;
                 }

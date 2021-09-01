@@ -1,5 +1,7 @@
 package com.example.salsa_videoannotation;
 
+import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
+
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,12 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
-import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
-
-import java.util.Map;
-import java.util.Set;
-
-public class AnnotationDetailsFragment extends Fragment
+public class AnnotationDetailsFragmentEditing extends Fragment
 {
     private MultiSelectionSpinner categoryMultiSelectSpinner;
     private MultiSelectionSpinner bodypartMultiSelectSpinner;
@@ -32,7 +29,7 @@ public class AnnotationDetailsFragment extends Fragment
     private PlayerActivity playerActivity;
     private Annotations currentAnnotationWrapper;
     private AnnotationData currentAnnotation;
-    public AnnotationDetailsFragment()
+    public AnnotationDetailsFragmentEditing()
     {
 
     }
@@ -40,7 +37,7 @@ public class AnnotationDetailsFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_annotation_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_annotation_details_editing, container, false);
         categoryMultiSelectSpinner = view.findViewById(R.id.categorySelector);
         categoryMultiSelectSpinner.setItems(AnnotationData.CATEGORIES);
         bodypartMultiSelectSpinner = view.findViewById(R.id.bodypartSelector);
@@ -49,8 +46,6 @@ public class AnnotationDetailsFragment extends Fragment
         save = view.findViewById(R.id.save_button);
         startTime = view.findViewById(R.id.start_time);
         playerActivity = (PlayerActivity) getActivity();
-        categoryMultiSelectSpinner.setSelected(true);
-        bodypartMultiSelectSpinner.setSelected(true);
 
         ImageView createAnnotation = playerActivity.findViewById(R.id.new_annotation);
         createAnnotation.setVisibility(View.INVISIBLE);
@@ -59,41 +54,45 @@ public class AnnotationDetailsFragment extends Fragment
         constraintSet.clone(parentLayout);
         constraintSet.connect(R.id.annotation_section, ConstraintSet.TOP, R.id.exoplayer_dance, ConstraintSet.BOTTOM);
         constraintSet.applyTo(parentLayout);
-
-        startTime.setText(HelperTool.createTimeRepresentation(playerActivity.simpleExoPlayer.getCurrentPosition()));
+        Bundle bundle = this.getArguments();
+        if(bundle != null)
+        {
+            String annotationWrapperId = bundle.getString("annotationWrapperId");
+            int annotationId = bundle.getInt("annotationId");
+            currentAnnotationWrapper = annotationWrapperList.get(annotationWrapperId);
+            currentAnnotation = currentAnnotationWrapper.getVideoAnnotationsMap().get(annotationId);
+            categoryMultiSelectSpinner.setSelection(currentAnnotation.getCategory());
+            bodypartMultiSelectSpinner.setSelection(currentAnnotation.getBodyPart());
+            content.setText(currentAnnotation.getContent());
+            startTime.setText(HelperTool.createTimeRepresentation(currentAnnotation.getStartTime()));
+            playerActivity.simpleExoPlayer.seekTo(currentAnnotation.getStartTime());
+            playerActivity.simpleExoPlayer.setPlayWhenReady(false);
+            categoryMultiSelectSpinner.setSelected(true);
+        }
+        else
+        {
+            startTime.setText(HelperTool.createTimeRepresentation(playerActivity.simpleExoPlayer.getCurrentPosition()));
+        }
         return view;
     }
 
-    public void addAnnotationAndSave()
+    public void editAnnotationAndSave()
     {
         if(checkValues())
         {
-            String id = playerActivity.myFiles.get(playerActivity.position).getId();
-            String path = playerActivity.myFiles.get(playerActivity.position).getPath();
-
-            Annotations annotations = HelperTool.getOrCreateAnnotationByVideoIdAndPath(id, path);
-
             long startTimeLong = playerActivity.simpleExoPlayer.getCurrentPosition();
-            Bitmap annotationThumbnail = HelperTool.getVideoFrame(startTimeLong, path);
+            Bitmap annotationThumbnail = HelperTool.getVideoFrame(startTimeLong, currentAnnotationWrapper.getVideoFilePath());
 
-            int newAnnotationId = 0;
-            if (annotations.getVideoAnnotationsMap() != null && annotations.getVideoAnnotationsMap().size() != 0) {
-                Set<Map.Entry<Integer, AnnotationData>> mapValues = annotations.getVideoAnnotationsMap().entrySet();
-                Map.Entry<Integer, AnnotationData>[] forId = new Map.Entry[mapValues.size()];
-                mapValues.toArray(forId);
-                AnnotationData lastEntry = forId[mapValues.size()-1].getValue();
-                newAnnotationId = lastEntry.getId() + 1;
-            }
-
-            annotations.handleAnnotationManipulation(Annotations.CREATE_TRANSACTION,
-                    newAnnotationId, startTimeLong
+            currentAnnotationWrapper.handleAnnotationManipulation(Annotations.UPDATE_TRANSACTION,
+                    currentAnnotation.getId(), startTimeLong
                     , categoryMultiSelectSpinner.getSelectedStrings(),
                     bodypartMultiSelectSpinner.getSelectedStrings(),
                     content.getText().toString(), annotationThumbnail, null);
 
-            saveAnnotation(annotations, annotationThumbnail, newAnnotationId);
+            saveAnnotation(currentAnnotationWrapper, annotationThumbnail, currentAnnotation.getId());
+            currentAnnotation = currentAnnotationWrapper.getVideoAnnotationsMap().get(currentAnnotation.getId());
             playerActivity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotations,
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
                             VideoAdapter.VIDEO_TYPE_FEEDBACK)).commit();
         }
         else
@@ -102,17 +101,18 @@ public class AnnotationDetailsFragment extends Fragment
         }
     }
 
-    private void saveAnnotation(Annotations annotationWrapper, Bitmap thumbnail, int newAnnotationId)
+
+    private void saveAnnotation(Annotations annotation, Bitmap thumbnail, int annotationId)
     {
         StorageModule storageModule = new StorageModule();
         if (storageModule.isExternalStorageWritable())
         {
-            if(storageModule.storeXML(getContext(), annotationWrapper) && StorageModule.storeThumbnail(getContext(), annotationWrapper.getId(), newAnnotationId, thumbnail))
+            if(storageModule.storeXML(getContext(), annotation) && StorageModule.storeThumbnail(getContext(), annotation.getId(), annotationId, thumbnail))
             {
-                if(annotationWrapperList.containsKey(annotationWrapper.getId()))
-                    annotationWrapperList.replace(annotationWrapper.getId(), annotationWrapper);
+                if(annotationWrapperList.containsKey(annotation.getId()))
+                    annotationWrapperList.replace(annotation.getId(), annotation);
                 else
-                    annotationWrapperList.put(annotationWrapper.getId(), annotationWrapper);
+                    annotationWrapperList.put(annotation.getId(), annotation);
 
                 Toast.makeText(getContext(), "Annotations Saved", Toast.LENGTH_SHORT).show();
             }
@@ -120,6 +120,26 @@ public class AnnotationDetailsFragment extends Fragment
             {
                 Toast.makeText(getContext(), "Failed to Save Annotations", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public void deleteAnnotation()
+    {
+        if(StorageModule.deleteAnnotationThumbnail(getContext(), currentAnnotationWrapper.getId(), currentAnnotation.getId()))
+        {
+            currentAnnotationWrapper.deleteAnnotation(currentAnnotation.getId());
+            if(StorageModule.storeXML(getContext(), currentAnnotationWrapper))
+            {
+                annotationWrapperList.replace(currentAnnotationWrapper.getId(), currentAnnotationWrapper);
+            }
+            Toast.makeText(getContext(), "Annotation Deleted", Toast.LENGTH_SHORT).show();
+            playerActivity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
+                            VideoAdapter.VIDEO_TYPE_FEEDBACK)).commit();
+        }
+        else
+        {
+            Toast.makeText(getContext(), "Failed to Delete Annotation", Toast.LENGTH_SHORT).show();
         }
     }
 

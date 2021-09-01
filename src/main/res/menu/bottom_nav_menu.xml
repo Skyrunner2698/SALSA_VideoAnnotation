@@ -2,19 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="Student Quiz"
+        android:title="@string/view_quiz_btm_nav"
         android:id="@+id/studentQuiz"
-        android:icon="@drawable/ic_baseline_folder"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_baseline_quiz_symbol" />
     <item
-        android:title="Feedback Creation"
+        android:title="@string/view_feedback_btm_nav"
+        android:id="@+id/viewFeedback"
+        android:icon="@drawable/ic_baseline_video_feedback_view" />
+    <item
+        android:title="@string/create_feedback_btm_nav"
         android:id="@+id/feedbackCreation"
-        android:icon="@drawable/ic_baseline_filter_list_file"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_baseline_create_feedback" />
     <item
-        android:title="Quiz Creation"
+        android:title="@string/create_quiz_btm_nav"
         android:id="@+id/quizCreation"
-        android:icon="@drawable/ic_baseline_filter_list_file"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_baseline_create_quiz" />
 
 </menu>

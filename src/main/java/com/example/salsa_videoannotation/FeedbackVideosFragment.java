@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,8 +17,14 @@ public class FeedbackVideosFragment extends Fragment {
     RecyclerView recyclerView;
     View view;
     com.example.salsa_videoannotation.VideoAdapter videoAdapter;
+    int videoType;
     public FeedbackVideosFragment() {
         // Required empty public constructor
+    }
+
+    public FeedbackVideosFragment(int videoType)
+    {
+        this.videoType = videoType;
     }
 
     @Override
@@ -25,9 +32,18 @@ public class FeedbackVideosFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_feedback_video_list, container, false);
         recyclerView = view.findViewById(R.id.feedbackRV);
+        TextView heading = view.findViewById(R.id.feedback_creation_Heading);
+        if(videoType == VideoAdapter.VIDEO_TYPE_FEEDBACK)
+        {
+            heading.setText(getResources().getText(R.string.feedback_creation_heading));
+        }
+        else if (videoType == VideoAdapter.VIDEO_TYPE_FEEDBACK_VIEWING)
+        {
+            heading.setText(getResources().getText(R.string.feedback_view_heading));
+        }
         if(feedbackVideos != null && feedbackVideos.size() > 0)
         {
-            videoAdapter = new com.example.salsa_videoannotation.VideoAdapter(getContext(), feedbackVideos, VideoAdapter.VIDEO_TYPE_FEEDBACK);
+            videoAdapter = new com.example.salsa_videoannotation.VideoAdapter(getContext(), feedbackVideos, videoType);
             recyclerView.setAdapter(videoAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         }

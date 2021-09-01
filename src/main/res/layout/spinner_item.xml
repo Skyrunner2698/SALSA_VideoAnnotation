@@ -4,6 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:scrollHorizontally="true"
+    android:textSize="15sp"
     android:textAlignment="inherit"
     android:id="@+id/spinner_item"
     android:textColor="@color/SecondaryText"/>

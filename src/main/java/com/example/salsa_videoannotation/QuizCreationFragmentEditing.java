@@ -1,14 +1,9 @@
 package com.example.salsa_videoannotation;
 
+import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
+
 import android.graphics.Bitmap;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.Fragment;
 
 import java.util.Map;
 import java.util.Set;
 
-public class QuizCreationFragment extends Fragment {
+public class QuizCreationFragmentEditing extends Fragment {
     private MultiSelectionSpinner categoryMultiSelectSpinner;
     private MultiSelectionSpinner bodypartMultiSelectSpinner;
     private Button save;
@@ -37,7 +36,7 @@ public class QuizCreationFragment extends Fragment {
     private Annotations currentAnnotationWrapper;
     private AnnotationData currentAnnotation;
 
-    public QuizCreationFragment() {
+    public QuizCreationFragmentEditing() {
         // Required empty public constructor
     }
 
@@ -45,7 +44,7 @@ public class QuizCreationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_quiz_creation, container, false);
+        View view = inflater.inflate(R.layout.fragment_quiz_creation_editing, container, false);
         categoryMultiSelectSpinner = view.findViewById(R.id.categorySelector);
         categoryMultiSelectSpinner.setItems(AnnotationData.CATEGORIES);
         bodypartMultiSelectSpinner = view.findViewById(R.id.bodypartSelector);
@@ -68,49 +67,54 @@ public class QuizCreationFragment extends Fragment {
         constraintSet.connect(R.id.annotation_section, ConstraintSet.TOP, R.id.exoplayer_dance, ConstraintSet.BOTTOM);
         constraintSet.applyTo(parentLayout);
 
-        startTime.setText(HelperTool.createTimeRepresentation(playerActivity.simpleExoPlayer.getCurrentPosition()));
+
+        Bundle bundle = this.getArguments();
+        if(bundle != null)
+        {
+            String annotationWrapperId = bundle.getString("annotationWrapperId");
+            int annotationId = bundle.getInt("annotationId");
+            currentAnnotationWrapper = annotationWrapperList.get(annotationWrapperId);
+            currentAnnotation = currentAnnotationWrapper.getVideoAnnotationsMap().get(annotationId);
+            categoryMultiSelectSpinner.setSelection(currentAnnotation.getCategory());
+            bodypartMultiSelectSpinner.setSelection(currentAnnotation.getBodyPart());
+            startTime.setText(HelperTool.createTimeRepresentation(currentAnnotation.getStartTime()));
+            question.setText(currentAnnotation.getQuizQuestion().getQuestion());
+            correctAnswer.setText(currentAnnotation.getQuizQuestion().getCorrectAnswer());
+            answer1.setText(currentAnnotation.getQuizQuestion().getAnswer1());
+            answer2.setText(currentAnnotation.getQuizQuestion().getAnswer2());
+            answer3.setText(currentAnnotation.getQuizQuestion().getAnswer3());
+            playerActivity.simpleExoPlayer.seekTo(currentAnnotation.getStartTime());
+            playerActivity.simpleExoPlayer.setPlayWhenReady(false);
+        }
         return view;
     }
 
-    public void addQuizAnnotationAndSave()
+    public void editQuizAnnotationAndSave()
     {
         if(checkValues())
         {
-            String id = playerActivity.myFiles.get(playerActivity.position).getId();
-            String path = playerActivity.myFiles.get(playerActivity.position).getPath();
-
-            Annotations annotations = HelperTool.getOrCreateAnnotationByVideoIdAndPath(id, path);
-
             long startTimeLong = playerActivity.simpleExoPlayer.getCurrentPosition();
-            Bitmap annotationThumbnail = HelperTool.getVideoFrame(startTimeLong, path);
+            Bitmap annotationThumbnail = HelperTool.getVideoFrame(startTimeLong, currentAnnotationWrapper.getVideoFilePath());
             QuizQuestion quizQuestion = new QuizQuestion(question.getText().toString(), correctAnswer.getText().toString(),
                     answer1.getText().toString(), answer2.getText().toString(), answer3.getText().toString());
-
-            int newAnnotationId = 1;
-            if (annotations.getVideoAnnotationsMap() != null && annotations.getVideoAnnotationsMap().size() != 0) {
-                Set<Map.Entry<Integer, AnnotationData>> mapValues = annotations.getVideoAnnotationsMap().entrySet();
-                Map.Entry<Integer, AnnotationData>[] forId = new Map.Entry[mapValues.size()];
-                mapValues.toArray(forId);
-                AnnotationData lastEntry = forId[mapValues.size()-1].getValue();
-                newAnnotationId = lastEntry.getId() + 1;
-            }
-
-            annotations.handleAnnotationManipulation(Annotations.CREATE_TRANSACTION,
-                    newAnnotationId, startTimeLong
+            currentAnnotationWrapper.handleAnnotationManipulation(Annotations.UPDATE_TRANSACTION,
+                    currentAnnotation.getId(), startTimeLong
                     , categoryMultiSelectSpinner.getSelectedStrings(),
                     bodypartMultiSelectSpinner.getSelectedStrings(),
                     null, annotationThumbnail, quizQuestion);
 
-            saveAnnotation(annotations, annotationThumbnail, newAnnotationId);
+            saveAnnotation(currentAnnotationWrapper, annotationThumbnail, currentAnnotation.getId());
+            currentAnnotation = currentAnnotationWrapper.getVideoAnnotationsMap().get(currentAnnotation.getId());
             playerActivity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotations,
-                           VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)).commit();
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
+                            VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)).commit();
         }
         else
         {
             Toast.makeText(playerActivity, "Category, Bodypart and Quiz Content cannot be blank.", Toast.LENGTH_LONG).show();
         }
     }
+
 
     private void saveAnnotation(Annotations annotation, Bitmap thumbnail, int annotationId)
     {
@@ -130,6 +134,26 @@ public class QuizCreationFragment extends Fragment {
             {
                 Toast.makeText(getContext(), "Failed to Save Annotations", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public void deleteAnnotation()
+    {
+        if(StorageModule.deleteAnnotationThumbnail(getContext(), currentAnnotationWrapper.getId(), currentAnnotation.getId()))
+        {
+            currentAnnotationWrapper.deleteAnnotation(currentAnnotation.getId());
+            if(StorageModule.storeXML(getContext(), currentAnnotationWrapper))
+            {
+                annotationWrapperList.replace(currentAnnotationWrapper.getId(), currentAnnotationWrapper);
+            }
+            Toast.makeText(getContext(), "Annotation Deleted", Toast.LENGTH_SHORT).show();
+            playerActivity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
+                            VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)).commit();
+        }
+        else
+        {
+            Toast.makeText(getContext(), "Failed to Delete Annotation", Toast.LENGTH_SHORT).show();
         }
     }
 

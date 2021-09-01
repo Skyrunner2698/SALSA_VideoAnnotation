@@ -14,7 +14,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/start_time"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/PrimaryText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,8 +23,8 @@
         android:id="@+id/start_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/PrimaryText"
-        android:textSize="20dp"
+        android:textColor="@color/SecondaryText"
+        android:textSize="18sp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/start_time_label"
@@ -38,7 +38,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/category_label"
         android:textColor="@color/PrimaryText"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/start_time" />
 
@@ -76,7 +76,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/bodypart_label"
         android:textColor="@color/PrimaryText"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/categorySelector" />
 
@@ -116,7 +116,7 @@
         android:layout_marginRight="10dp"
         android:hint="Enter Annotation Text"
         android:gravity="top|left"
-        android:textColor="@color/PrimaryText"
+        android:textColor="@color/SecondaryText"
         android:textColorHint="@color/SecondaryText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bodypartBottomDivider"
@@ -139,8 +139,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/annotation_content"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="OnClick" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/back_button"

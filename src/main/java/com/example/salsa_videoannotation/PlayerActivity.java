@@ -46,7 +46,7 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
         playerView = findViewById(R.id.exoplayer_dance);
         position = getIntent().getIntExtra("position", -1);
-        displayType = getIntent().getIntExtra("sender", -1);
+        displayType = getIntent().getIntExtra("videoType", -1);
         myFiles = videoFiles;
         // determines where the videofiles are coming from to get the correct positioning in arraylist
 
@@ -87,6 +87,17 @@ public class PlayerActivity extends AppCompatActivity {
                 simpleExoPlayer.setPlayWhenReady(true);
                 ImageView createAnnotation = findViewById(R.id.new_annotation);
                 createAnnotation.setOnClickListener(this::onCreateNewQuizAnnotationClick);
+            }
+            else if(displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK_VIEWING)
+            {
+                simpleExoPlayer.setPlayWhenReady(false);
+                ImageView createAnnotation = findViewById(R.id.new_annotation);
+                createAnnotation.setVisibility(View.INVISIBLE);
+                ConstraintLayout parentLayout = findViewById(R.id.parent_layout);
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(parentLayout);
+                constraintSet.connect(R.id.annotation_section, ConstraintSet.TOP, R.id.exoplayer_dance, ConstraintSet.BOTTOM);
+                constraintSet.applyTo(parentLayout);
             }
 
             // creating the annotation display fragment for the current videofile selected
@@ -150,22 +161,33 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     // onClick listener to be assigned to Save Button when used for editing existing annotations, Assigned in code on AnnotationControlsFragment
-    public OnClickListener onSaveChangesAnnotationButtonClick = new OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            if(displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK) {
-                AnnotationDetailsFragment fragment = (AnnotationDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
-                fragment.editAnnotationAndSave();
-            }
-            else
-            {
-                QuizCreationFragment fragment = (QuizCreationFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
-                fragment.editQuizAnnotationAndSave();
-            }
-            simpleExoPlayer.setPlayWhenReady(true);
+    public void onSaveChangesAnnotationButtonClick(View v)
+    {
+        if(displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK) {
+            AnnotationDetailsFragmentEditing fragment = (AnnotationDetailsFragmentEditing) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
+            fragment.editAnnotationAndSave();
         }
-    };
+        else
+        {
+            QuizCreationFragmentEditing fragment = (QuizCreationFragmentEditing) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
+            fragment.editQuizAnnotationAndSave();
+        }
+        simpleExoPlayer.setPlayWhenReady(true);
+    }
+
+    public void onDeleteButtonClick(View view)
+    {
+        if(displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK) {
+            AnnotationDetailsFragmentEditing fragment = (AnnotationDetailsFragmentEditing) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
+            fragment.deleteAnnotation();
+        }
+        else if (displayType == VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)
+        {
+            QuizCreationFragmentEditing fragment = (QuizCreationFragmentEditing) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
+            fragment.deleteAnnotation();
+        }
+        simpleExoPlayer.setPlayWhenReady(true);
+    }
 
     private void setUpHashMapAnswers()
     {

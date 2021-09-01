@@ -39,7 +39,7 @@ public class AnnotationDisplayFragment extends Fragment {
         recyclerView = view.findViewById(R.id.annotation_display_RV);
 
 
-        if (displayType != VideoAdapter.VIDEO_TYPE_QUIZ) {
+        if (displayType == VideoAdapter.VIDEO_TYPE_QUIZ_CREATION || displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK) {
             PlayerActivity playerActivity = (PlayerActivity) getActivity();
             ImageView createAnnotation = playerActivity.findViewById(R.id.new_annotation);
             createAnnotation.setVisibility(View.VISIBLE);
