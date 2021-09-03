@@ -111,6 +111,19 @@
         app:layout_constraintTop_toBottomOf="@+id/bodypartSelector" />
 
 
+    <TextView
+        android:id="@+id/question_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/question_label"
+        android:textColor="@color/PrimaryText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bodypartBottomDivider"
+        app:layout_constraintBottom_toTopOf="@id/annotation_question"/>
+
     <EditText
         android:id="@+id/annotation_question"
         android:layout_width="match_parent"
@@ -124,8 +137,21 @@
         android:textColor="@color/SecondaryText"
         android:textColorHint="@color/SecondaryText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bodypartBottomDivider"
-        app:layout_constraintBottom_toTopOf="@+id/annotation_correct_answer"/>
+        app:layout_constraintTop_toBottomOf="@id/question_label"
+        app:layout_constraintBottom_toTopOf="@+id/correct_answer_label"/>
+
+    <TextView
+        android:id="@+id/correct_answer_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/correct_answer_label"
+        android:textColor="@color/PrimaryText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_question"
+        app:layout_constraintBottom_toTopOf="@id/annotation_correct_answer"/>
 
     <EditText
         android:id="@+id/annotation_correct_answer"
@@ -140,8 +166,21 @@
         android:textColor="@color/SecondaryText"
         android:textColorHint="@color/SecondaryText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/annotation_question"
-        app:layout_constraintBottom_toTopOf="@+id/annotation_answer_1"/>
+        app:layout_constraintTop_toBottomOf="@id/correct_answer_label"
+        app:layout_constraintBottom_toTopOf="@+id/incorrect_answer_label_1"/>
+
+    <TextView
+        android:id="@+id/incorrect_answer_label_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/incorrect_answer_label"
+        android:textColor="@color/PrimaryText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_correct_answer"
+        app:layout_constraintBottom_toTopOf="@id/annotation_answer_1"/>
 
     <EditText
         android:id="@+id/annotation_answer_1"
@@ -156,8 +195,21 @@
         android:textColor="@color/SecondaryText"
         android:textColorHint="@color/SecondaryText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/annotation_correct_answer"
-        app:layout_constraintBottom_toTopOf="@+id/annotation_answer_2"/>
+        app:layout_constraintTop_toBottomOf="@id/incorrect_answer_label_1"
+        app:layout_constraintBottom_toTopOf="@+id/incorrect_answer_label_2"/>
+
+    <TextView
+        android:id="@+id/incorrect_answer_label_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/incorrect_answer_label"
+        android:textColor="@color/PrimaryText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_answer_1"
+        app:layout_constraintBottom_toTopOf="@id/annotation_answer_2"/>
 
     <EditText
         android:id="@+id/annotation_answer_2"
@@ -172,8 +224,21 @@
         android:textColor="@color/SecondaryText"
         android:textColorHint="@color/SecondaryText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/annotation_answer_1"
-        app:layout_constraintBottom_toTopOf="@+id/annotation_answer_3"/>
+        app:layout_constraintTop_toBottomOf="@id/incorrect_answer_label_2"
+        app:layout_constraintBottom_toTopOf="@+id/incorrect_answer_label_3"/>
+
+    <TextView
+        android:id="@+id/incorrect_answer_label_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/incorrect_answer_label"
+        android:textColor="@color/PrimaryText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/annotation_answer_2"
+        app:layout_constraintBottom_toTopOf="@id/annotation_answer_3"/>
 
     <EditText
         android:id="@+id/annotation_answer_3"
@@ -188,7 +253,7 @@
         android:textColor="@color/SecondaryText"
         android:textColorHint="@color/SecondaryText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/annotation_answer_2"
+        app:layout_constraintTop_toBottomOf="@id/incorrect_answer_label_3"
         app:layout_constraintBottom_toTopOf="@+id/save_button"/>
 
 

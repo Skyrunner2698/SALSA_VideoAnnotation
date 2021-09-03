@@ -1,5 +1,6 @@
 package com.example.salsa_videoannotation;
 
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -7,7 +8,9 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -36,6 +39,9 @@ public class PlayerActivity extends AppCompatActivity {
     public int displayType;
     private Annotations annotationsForDisplay;
     public static HashMap<Integer, QuizAnswers> answersHashMap = new HashMap<>();
+    public static int quizScore = 0;
+    public static int noQuizAnswersCompleted = 0;
+    public static boolean quizCompleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +123,9 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         simpleExoPlayer.release();
+        noQuizAnswersCompleted = 0;
+        quizCompleted = false;
+        quizScore = 0;
     }
 
     // onClick method to create a new annotation by switching to the AnnotationControlsFragment, assigned to create annotation image in XML
@@ -189,6 +198,12 @@ public class PlayerActivity extends AppCompatActivity {
         simpleExoPlayer.setPlayWhenReady(true);
     }
 
+    public void onHintButtonClicked(View view)
+    {
+        QuizAnsweringFragment fragment = (QuizAnsweringFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
+        fragment.hintCreation();
+    }
+
     private void setUpHashMapAnswers()
     {
         for(Map.Entry mapElement : annotationsForDisplay.getVideoAnnotationsMap().entrySet())
@@ -198,45 +213,23 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
-//    public void showAnnotationPopUpMenu(View view)
-//    {
-//        PopupMenu popupMenu = new PopupMenu(this, view);
-//        MenuInflater menuInflater = popupMenu.getMenuInflater();
-//        menuInflater.inflate(R.menu.popup_delete_menu, popupMenu.getMenu());
-//        popupMenu.setOnMenuItemClickListener(this::onMenuItemClick);
-//        MenuItem deleteItem = (MenuItem) popupMenu.getMenu().findItem(R.id.delete_annotation);
-//        Intent intent = new Intent();
-//        deleteItem.setIntent(intent);
-//        popupMenu.show();
-//    }
-//
-//    public boolean onMenuItemClick(MenuItem item)
-//    {
-//        switch(item.getItemId())
-//        {
-//            case R.id.delete_annotation:
-//                Intent intent = item.getIntent();
-//                AnnotationDisplayFragment fragment = (AnnotationDisplayFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
-//
-//                //                AnnotationControlsFragment fragment = (AnnotationControlsFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
-//                fragment.deleteAnnotation(intent.getStringExtra("annotationWrapperId"), intent.getIntExtra("annotationId", -1));
-//                return true;
-//
-//            default:
-//                return false;
-//        }
-//    }
+    public void onQuizComplete()
+    {
+        if (quizCompleted == false) {
+            simpleExoPlayer.setPlayWhenReady(false);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("You have completed the quiz! \nYour score is " + quizScore + "/" + answersHashMap.size()
+            + ". \nYou can continue to open the previous questions to check your answers or exit the quiz to retake it!");
+            alertDialogBuilder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
+                }
+            });
 
-//    @Override
-//    public void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        updateTrackSelectorParameters();
-//        updateStartPosition();
-//        outState.putParcelable(KEY_TRACK_SELECTOR_PARAMETERS, trackSelectorParameters);
-//        outState.putBoolean(KEY_AUTO_PLAY, startAutoPlay);
-//        outState.putInt(KEY_WINDOW, startWindow);
-//        outState.putLong(KEY_POSITION, startPosition);
-//    }
-//
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            quizCompleted = true;
+        }
+    }
 }

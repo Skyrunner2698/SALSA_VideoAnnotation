@@ -1,6 +1,8 @@
 package com.example.salsa_videoannotation;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +12,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
 import static com.example.salsa_videoannotation.PlayerActivity.answersHashMap;
+import static com.example.salsa_videoannotation.PlayerActivity.noQuizAnswersCompleted;
+import static com.example.salsa_videoannotation.PlayerActivity.quizCompleted;
+import static com.example.salsa_videoannotation.PlayerActivity.quizScore;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class QuizAnsweringFragment extends Fragment {
@@ -27,10 +34,11 @@ public class QuizAnsweringFragment extends Fragment {
     private Annotations currentAnnotationWrapper;
     private AnnotationData currentAnnotation;
     private View view;
-    private int score;
     public static final int UNANSWERED = 0;
     public static final int ANSWER_CORRECT = 1;
     public static final int ANSWER_INCORRECT = 2;
+    private static final int HINT_CATEGORY = 0;
+    private static final int HINT_BODYPART = 1;
 
 
     public QuizAnsweringFragment() {
@@ -152,6 +160,8 @@ public class QuizAnsweringFragment extends Fragment {
         quizAnswers.setAnswerText(correctAnswer.getText().toString());
         quizAnswers.setAnswerStatus(ANSWER_CORRECT);
         answersHashMap.replace(currentAnnotation.getId(), quizAnswers);
+        quizScore += 1;
+        noQuizAnswersCompleted +=1;
     }
 
     public void onIncorrectAnswerClick(View view)
@@ -175,6 +185,41 @@ public class QuizAnsweringFragment extends Fragment {
                 break;
         }
         doIncorrectAnswerButtonChanges(tempButton);
+        noQuizAnswersCompleted +=1;
+    }
+
+    public void hintCreation()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+        int randomHint = (int)(Math.random()*(1-0+1) + 0);
+        if(randomHint == HINT_CATEGORY)
+        {
+            List<String> categories = currentAnnotation.getCategory();
+            int randomCat = (int)(Math.random()*((categories.size()-1)-0+1) + 0);
+            alertDialogBuilder.setMessage("A category is " + categories.get(randomCat));
+            alertDialogBuilder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
+        else if (randomHint == HINT_BODYPART)
+        {
+            List<String> bodyparts = currentAnnotation.getBodyPart();
+            int randomCat = (int)(Math.random()*((bodyparts.size()-1)-0+1) + 0);
+            alertDialogBuilder.setMessage("A bodypart is " + bodyparts.get(randomCat));
+            alertDialogBuilder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.PrimaryText, null));
     }
 
     private void doCorrectAnswerButtonChanges()
@@ -197,5 +242,13 @@ public class QuizAnsweringFragment extends Fragment {
         answer1.setClickable(false);
         answer2.setClickable(false);
         answer3.setClickable(false);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(answersHashMap.size() == noQuizAnswersCompleted) {
+            playerActivity.onQuizComplete();
+        }
     }
 }

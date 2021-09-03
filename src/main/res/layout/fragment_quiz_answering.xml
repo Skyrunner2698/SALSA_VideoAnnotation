@@ -84,6 +84,7 @@
         android:layout_marginRight="30dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/Button"
+        android:onClick="onHintButtonClicked"
         android:text="@string/hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/back_button_quiz"

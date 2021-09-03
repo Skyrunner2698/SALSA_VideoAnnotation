@@ -23,7 +23,10 @@ public class QuizQuestion
     }
 
     public QuizQuestion(String question, String correctAnswer, String answer1, String answer2, String answer3) {
-        this.question = question;
+        if(!question.contains("?"))
+            this.question =  question + "?";
+        else
+            this.question = question;
         this.correctAnswer = correctAnswer;
         this.answer1 = answer1;
         this.answer2 = answer2;

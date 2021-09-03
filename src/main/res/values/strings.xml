@@ -19,4 +19,7 @@
     <string name="view_quiz_btm_nav">Quiz</string>
     <string name="annotation_content_label">Feedback Notes</string>
     <string name="save_changes">Save Changes</string>
+    <string name="question_label">Question</string>
+    <string name="correct_answer_label">Correct Answer</string>
+    <string name="incorrect_answer_label">Incorrect Answer</string>
 </resources>
