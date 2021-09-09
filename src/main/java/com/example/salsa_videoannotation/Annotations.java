@@ -1,107 +1,106 @@
 package com.example.salsa_videoannotation;
 
+
 import android.graphics.Bitmap;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Root
 public class Annotations
 {
-    public static final int CREATE_TRANSACTION = 1;
-    public static final int UPDATE_TRANSACTION = 2;
-    public static final String PLACEHOLDER_VIDEOFILE_PATH = "Holder";
+    public static final String[] CATEGORIES = {"Step Direction", "Foot Position", "Step Size", "Weight Transfer", "Movement Quality", "Timing", "Rhythm", "Suggested Moves to try"};
+    public static final String[] BODYPARTS = {"Head", "Shoulders", "Arms", "Hands", "Torso", "Hips", "Legs", "Feet"};
     @Attribute
-    private String id;
+    private int id;
     @Element
-    private String name;
-    @Element
-    private String videoFilePath;
-    @ElementMap
-    private HashMap<Integer, AnnotationData> videoAnnotationsMap = new HashMap<>();
+    private long startTime;
+    @ElementList
+    private List<String> category;
+    @ElementList
+    private List<String> bodyPart;
+    @Element(required = false)
+    private String content;
+    @Element(required = false)
+    private QuizQuestion quizQuestion;
+    private Bitmap thumbnail;
 
     public Annotations()
     {
+
     }
 
-    public Annotations(String id, String name, String videoFilePath)
-    {
+    public Annotations(int id, long startTime, List<String> category, List<String> bodyPart, String content, Bitmap thumbnail) {
+        this(id, startTime, category, bodyPart, content, null, thumbnail);
+    }
+
+    public Annotations(int id, long startTime, List<String> category, List<String> bodyPart, String content, QuizQuestion quizQuestion, Bitmap thumbnail) {
         this.id = id;
-        this.name = name;
-        this.videoFilePath = videoFilePath;
+        this.startTime = startTime;
+        this.category = category;
+        this.bodyPart = bodyPart;
+        this.content = content;
+        this.quizQuestion = quizQuestion;
+        this.thumbnail = thumbnail;
     }
 
-    public void handleAnnotationManipulation(int transactionType, int videoAnnotationId, long startTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail, QuizQuestion quizQuestion)
-    {
-        switch (transactionType)
-        {
-            case CREATE_TRANSACTION:
-                addNewAnnotation(videoAnnotationId, startTime, category, bodyPart, content, annotationThumbnail, quizQuestion);
-                break;
-            case UPDATE_TRANSACTION:
-                updateAnnotation(videoAnnotationId, startTime, category, bodyPart, content, annotationThumbnail, quizQuestion);
-                break;
-        }
-    }
-
-    public void deleteAnnotation(int annotationId)
-    {
-        videoAnnotationsMap.remove(annotationId);
-    }
-
-    private void updateAnnotation(int annotationId, long startTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail, QuizQuestion quizQuestion)
-    {
-        AnnotationData updatedAnnotation = new AnnotationData(annotationId, startTime, category, bodyPart, content, quizQuestion, annotationThumbnail);
-        videoAnnotationsMap.replace(annotationId, updatedAnnotation);
-    }
-
-    private void addNewAnnotation(int newAnnotationId, long startTime, List<String> category, List<String> bodyPart, String content, Bitmap annotationThumbnail, QuizQuestion quizQuestion)
-    {
-        AnnotationData newAnnotation = new AnnotationData(newAnnotationId, startTime, category, bodyPart, content, quizQuestion, annotationThumbnail);
-        videoAnnotationsMap.put(newAnnotation.getId(), newAnnotation);
-    }
-
-    public String getId()
-    {
+    public int getId() {
         return id;
     }
 
-
-    public void setId(String id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
-    public HashMap<Integer, AnnotationData> getVideoAnnotationsMap() {
-        return videoAnnotationsMap;
+    public List<String> getCategory() {
+        return category;
     }
 
-    public void setVideoAnnotationsMap(HashMap<Integer, AnnotationData> videoAnnotationsMap) {
-        this.videoAnnotationsMap = videoAnnotationsMap;
+    public void setCategory(List<String> category) {
+        this.category = category;
     }
 
-    public String getVideoFilePath() {
-        return videoFilePath;
+    public List<String> getBodyPart() {
+        return bodyPart;
     }
 
-    public void setVideoFilePath(String videoFilePath) {
-        this.videoFilePath = videoFilePath;
+    public void setBodyPart(List<String> bodyPart) {
+        this.bodyPart = bodyPart;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Bitmap getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Bitmap thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public QuizQuestion getQuizQuestion() {
+        return quizQuestion;
+    }
+
+    public void setQuizQuestion(QuizQuestion quizQuestion) {
+        this.quizQuestion = quizQuestion;
     }
 }

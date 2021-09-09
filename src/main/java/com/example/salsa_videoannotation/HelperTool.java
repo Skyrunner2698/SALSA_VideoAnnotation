@@ -30,17 +30,17 @@ public class HelperTool
         return TimeUnit.MINUTES.toMillis(Long.parseLong(min)) + TimeUnit.SECONDS.toMillis(Long.parseLong(sec));
     }
 
-    public static Annotations getAnnotationByVideoId(String id)
+    public static AnnotationWrapper getAnnotationByVideoId(String id)
     {
-        return getOrCreateAnnotationByVideoIdAndPath(id, Annotations.PLACEHOLDER_VIDEOFILE_PATH);
+        return getOrCreateAnnotationByVideoIdAndPath(id, AnnotationWrapper.PLACEHOLDER_VIDEOFILE_PATH);
     }
 
-    public static Annotations getOrCreateAnnotationByVideoIdAndPath(String id, String filepath)
+    public static AnnotationWrapper getOrCreateAnnotationByVideoIdAndPath(String id, String filepath)
     {
         if (annotationWrapperList.containsKey(id))
             return annotationWrapperList.get(id);
         else
-            return new Annotations(id, "Teacher", filepath);
+            return new AnnotationWrapper(id, "Teacher", filepath);
     }
 
     public static Bitmap getVideoFrame(long time, String filepath) {

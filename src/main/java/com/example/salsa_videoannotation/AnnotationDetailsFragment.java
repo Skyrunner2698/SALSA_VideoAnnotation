@@ -30,8 +30,8 @@ public class AnnotationDetailsFragment extends Fragment
     private Button save;
     private TextView startTime;
     private PlayerActivity playerActivity;
-    private Annotations currentAnnotationWrapper;
-    private AnnotationData currentAnnotation;
+    private AnnotationWrapper currentAnnotationWrapper;
+    private Annotations currentAnnotation;
     public AnnotationDetailsFragment()
     {
 
@@ -42,9 +42,9 @@ public class AnnotationDetailsFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_annotation_details, container, false);
         categoryMultiSelectSpinner = view.findViewById(R.id.categorySelector);
-        categoryMultiSelectSpinner.setItems(AnnotationData.CATEGORIES);
+        categoryMultiSelectSpinner.setItems(Annotations.CATEGORIES);
         bodypartMultiSelectSpinner = view.findViewById(R.id.bodypartSelector);
-        bodypartMultiSelectSpinner.setItems(AnnotationData.BODYPARTS);
+        bodypartMultiSelectSpinner.setItems(Annotations.BODYPARTS);
         content = view.findViewById(R.id.annotation_content);
         save = view.findViewById(R.id.save_button);
         startTime = view.findViewById(R.id.start_time);
@@ -71,30 +71,31 @@ public class AnnotationDetailsFragment extends Fragment
             String id = playerActivity.myFiles.get(playerActivity.position).getId();
             String path = playerActivity.myFiles.get(playerActivity.position).getPath();
 
-            Annotations annotations = HelperTool.getOrCreateAnnotationByVideoIdAndPath(id, path);
+            AnnotationWrapper annotationWrapper = HelperTool.getOrCreateAnnotationByVideoIdAndPath(id, path);
 
             long startTimeLong = playerActivity.simpleExoPlayer.getCurrentPosition();
             Bitmap annotationThumbnail = HelperTool.getVideoFrame(startTimeLong, path);
 
             int newAnnotationId = 0;
-            if (annotations.getVideoAnnotationsMap() != null && annotations.getVideoAnnotationsMap().size() != 0) {
-                Set<Map.Entry<Integer, AnnotationData>> mapValues = annotations.getVideoAnnotationsMap().entrySet();
-                Map.Entry<Integer, AnnotationData>[] forId = new Map.Entry[mapValues.size()];
+            if (annotationWrapper.getVideoAnnotationsMap() != null && annotationWrapper.getVideoAnnotationsMap().size() != 0) {
+                Set<Map.Entry<Integer, Annotations>> mapValues = annotationWrapper.getVideoAnnotationsMap().entrySet();
+                Map.Entry<Integer, Annotations>[] forId = new Map.Entry[mapValues.size()];
                 mapValues.toArray(forId);
-                AnnotationData lastEntry = forId[mapValues.size()-1].getValue();
+                Annotations lastEntry = forId[mapValues.size()-1].getValue();
                 newAnnotationId = lastEntry.getId() + 1;
             }
 
-            annotations.handleAnnotationManipulation(Annotations.CREATE_TRANSACTION,
+            annotationWrapper.handleAnnotationManipulation(AnnotationWrapper.CREATE_TRANSACTION,
                     newAnnotationId, startTimeLong
                     , categoryMultiSelectSpinner.getSelectedStrings(),
                     bodypartMultiSelectSpinner.getSelectedStrings(),
                     content.getText().toString(), annotationThumbnail, null);
 
-            saveAnnotation(annotations, annotationThumbnail, newAnnotationId);
+            saveAnnotation(annotationWrapper, annotationThumbnail, newAnnotationId);
             playerActivity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotations,
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotationWrapper,
                             VideoAdapter.VIDEO_TYPE_FEEDBACK)).commit();
+            playerActivity.simpleExoPlayer.setPlayWhenReady(true);
         }
         else
         {
@@ -102,7 +103,7 @@ public class AnnotationDetailsFragment extends Fragment
         }
     }
 
-    private void saveAnnotation(Annotations annotationWrapper, Bitmap thumbnail, int newAnnotationId)
+    private void saveAnnotation(AnnotationWrapper annotationWrapper, Bitmap thumbnail, int newAnnotationId)
     {
         StorageModule storageModule = new StorageModule();
         if (storageModule.isExternalStorageWritable())

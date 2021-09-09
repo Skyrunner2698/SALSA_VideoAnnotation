@@ -3,12 +3,11 @@ package com.example.salsa_videoannotation;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +36,7 @@ public class PlayerActivity extends AppCompatActivity {
     public int position = -1;
     public ArrayList<VideoFiles> myFiles = new ArrayList<>();
     public int displayType;
-    private Annotations annotationsForDisplay;
+    private AnnotationWrapper annotationWrapperForDisplay;
     public static HashMap<Integer, QuizAnswers> answersHashMap = new HashMap<>();
     public static int quizScore = 0;
     public static int noQuizAnswersCompleted = 0;
@@ -70,7 +69,7 @@ public class PlayerActivity extends AppCompatActivity {
             simpleExoPlayer.prepare(mediaSource);
 
             // creating the annotation display fragment for the current videofile selected
-            annotationsForDisplay = HelperTool.getAnnotationByVideoId(myFiles.get(position).getId());
+            annotationWrapperForDisplay = HelperTool.getAnnotationByVideoId(myFiles.get(position).getId());
 
             if (displayType == VideoAdapter.VIDEO_TYPE_FEEDBACK)
             {
@@ -108,7 +107,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             // creating the annotation display fragment for the current videofile selected
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotationsForDisplay,
+                    .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotationWrapperForDisplay,
                             displayType)).commit();
         }
     }
@@ -156,7 +155,6 @@ public class PlayerActivity extends AppCompatActivity {
             QuizCreationFragment fragment = (QuizCreationFragment) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
             fragment.addQuizAnnotationAndSave();
         }
-        simpleExoPlayer.setPlayWhenReady(true);
     }
 
     // onClick method for exiting the creation or editing of an annotation, assigned to back button by default in XML
@@ -181,7 +179,6 @@ public class PlayerActivity extends AppCompatActivity {
             QuizCreationFragmentEditing fragment = (QuizCreationFragmentEditing) getSupportFragmentManager().findFragmentById(R.id.annotation_section);
             fragment.editQuizAnnotationAndSave();
         }
-        simpleExoPlayer.setPlayWhenReady(true);
     }
 
     public void onDeleteButtonClick(View view)
@@ -206,9 +203,9 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void setUpHashMapAnswers()
     {
-        for(Map.Entry mapElement : annotationsForDisplay.getVideoAnnotationsMap().entrySet())
+        for(Map.Entry mapElement : annotationWrapperForDisplay.getVideoAnnotationsMap().entrySet())
         {
-            AnnotationData annotation = (AnnotationData) mapElement.getValue();
+            Annotations annotation = (Annotations) mapElement.getValue();
             answersHashMap.put(annotation.getId(), new QuizAnswers(QuizAnsweringFragment.UNANSWERED));
         }
     }
@@ -217,7 +214,7 @@ public class PlayerActivity extends AppCompatActivity {
     {
         if (quizCompleted == false) {
             simpleExoPlayer.setPlayWhenReady(false);
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
             alertDialogBuilder.setMessage("You have completed the quiz! \nYour score is " + quizScore + "/" + answersHashMap.size()
             + ". \nYou can continue to open the previous questions to check your answers or exit the quiz to retake it!");
             alertDialogBuilder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
@@ -229,6 +226,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.PrimaryText, null));
             quizCompleted = true;
         }
     }

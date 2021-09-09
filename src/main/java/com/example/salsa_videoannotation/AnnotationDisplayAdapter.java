@@ -20,21 +20,21 @@ import java.util.Comparator;
 
 public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDisplayAdapter.MyViewHolder> {
     private Context mContext;
-    static ArrayList<AnnotationData> annotations;
-    private Annotations annotationWrapper;
+    static ArrayList<Annotations> annotations;
+    private AnnotationWrapper annotationWrapper;
     View view;
     private int displayType;
 
-    public AnnotationDisplayAdapter(Context mContext, Annotations annotationWrapper, int displayType) {
+    public AnnotationDisplayAdapter(Context mContext, AnnotationWrapper annotationWrapper, int displayType) {
         this.mContext = mContext;
         this.annotationWrapper = annotationWrapper;
-        this.annotations = new ArrayList<AnnotationData>(annotationWrapper.getVideoAnnotationsMap().values());
+        this.annotations = new ArrayList<Annotations>(annotationWrapper.getVideoAnnotationsMap().values());
         this.displayType = displayType;
 
         // Comparator method to sort list of annotations by startTime (ascending order)
-        Collections.sort(annotations, new Comparator<AnnotationData>() {
+        Collections.sort(annotations, new Comparator<Annotations>() {
             @Override
-            public int compare(AnnotationData o1, AnnotationData o2) {
+            public int compare(Annotations o1, Annotations o2) {
                 return (int) (o1.getStartTime() - o2.getStartTime());
             }
         });
@@ -119,7 +119,7 @@ public class AnnotationDisplayAdapter extends RecyclerView.Adapter<AnnotationDis
 
         public void onDeleteClick(View view)
         {
-            AnnotationData annotationToDelete = annotations.get(getAdapterPosition());
+            Annotations annotationToDelete = annotations.get(getAdapterPosition());
         }
     }
 }

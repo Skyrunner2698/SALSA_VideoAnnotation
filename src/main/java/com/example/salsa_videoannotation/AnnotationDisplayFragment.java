@@ -17,14 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AnnotationDisplayFragment extends Fragment {
     AnnotationDisplayAdapter annotationDisplayAdapter;
     RecyclerView recyclerView;
-    Annotations annotationsWrapper;
+    AnnotationWrapper annotationsWrapper;
     private int displayType;
 
     public AnnotationDisplayFragment() {
         // Required empty public constructor
     }
 
-    public AnnotationDisplayFragment(Annotations annotationsWrapper, int displayType)
+    public AnnotationDisplayFragment(AnnotationWrapper annotationsWrapper, int displayType)
     {
         this.annotationsWrapper = annotationsWrapper;
         this.displayType = displayType;

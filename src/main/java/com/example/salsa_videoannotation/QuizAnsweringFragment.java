@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +17,9 @@ import androidx.fragment.app.Fragment;
 import static com.example.salsa_videoannotation.MainActivity.annotationWrapperList;
 import static com.example.salsa_videoannotation.PlayerActivity.answersHashMap;
 import static com.example.salsa_videoannotation.PlayerActivity.noQuizAnswersCompleted;
-import static com.example.salsa_videoannotation.PlayerActivity.quizCompleted;
 import static com.example.salsa_videoannotation.PlayerActivity.quizScore;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class QuizAnsweringFragment extends Fragment {
     private TextView question;
@@ -31,8 +28,8 @@ public class QuizAnsweringFragment extends Fragment {
     private Button answer3;
     private Button correctAnswer;
     private PlayerActivity playerActivity;
-    private Annotations currentAnnotationWrapper;
-    private AnnotationData currentAnnotation;
+    private AnnotationWrapper currentAnnotationWrapper;
+    private Annotations currentAnnotation;
     private View view;
     public static final int UNANSWERED = 0;
     public static final int ANSWER_CORRECT = 1;
@@ -183,6 +180,11 @@ public class QuizAnsweringFragment extends Fragment {
                 tempButton = view.findViewById(R.id.answer_button_3);
                 quizAnswers.setAnswerText(tempButton.getText().toString());
                 break;
+            case R.id.answer_button_4:
+                tempButton = view.findViewById(R.id.answer_button_4);
+                quizAnswers.setAnswerText(tempButton.getText().toString());
+                break;
+
         }
         doIncorrectAnswerButtonChanges(tempButton);
         noQuizAnswersCompleted +=1;

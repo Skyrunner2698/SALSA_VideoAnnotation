@@ -19,9 +19,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
-import java.util.Map;
-import java.util.Set;
-
 public class QuizCreationFragmentEditing extends Fragment {
     private MultiSelectionSpinner categoryMultiSelectSpinner;
     private MultiSelectionSpinner bodypartMultiSelectSpinner;
@@ -33,8 +30,8 @@ public class QuizCreationFragmentEditing extends Fragment {
     private EditText answer2;
     private EditText answer3;
     private PlayerActivity playerActivity;
-    private Annotations currentAnnotationWrapper;
-    private AnnotationData currentAnnotation;
+    private AnnotationWrapper currentAnnotationWrapper;
+    private Annotations currentAnnotation;
 
     public QuizCreationFragmentEditing() {
         // Required empty public constructor
@@ -46,9 +43,9 @@ public class QuizCreationFragmentEditing extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_quiz_creation_editing, container, false);
         categoryMultiSelectSpinner = view.findViewById(R.id.categorySelector);
-        categoryMultiSelectSpinner.setItems(AnnotationData.CATEGORIES);
+        categoryMultiSelectSpinner.setItems(Annotations.CATEGORIES);
         bodypartMultiSelectSpinner = view.findViewById(R.id.bodypartSelector);
-        bodypartMultiSelectSpinner.setItems(AnnotationData.BODYPARTS);
+        bodypartMultiSelectSpinner.setItems(Annotations.BODYPARTS);
         save = view.findViewById(R.id.save_button_quiz);
         startTime = view.findViewById(R.id.start_time);
         question = view.findViewById(R.id.annotation_question);
@@ -97,7 +94,7 @@ public class QuizCreationFragmentEditing extends Fragment {
             Bitmap annotationThumbnail = HelperTool.getVideoFrame(startTimeLong, currentAnnotationWrapper.getVideoFilePath());
             QuizQuestion quizQuestion = new QuizQuestion(question.getText().toString(), correctAnswer.getText().toString(),
                     answer1.getText().toString(), answer2.getText().toString(), answer3.getText().toString());
-            currentAnnotationWrapper.handleAnnotationManipulation(Annotations.UPDATE_TRANSACTION,
+            currentAnnotationWrapper.handleAnnotationManipulation(AnnotationWrapper.UPDATE_TRANSACTION,
                     currentAnnotation.getId(), startTimeLong
                     , categoryMultiSelectSpinner.getSelectedStrings(),
                     bodypartMultiSelectSpinner.getSelectedStrings(),
@@ -108,6 +105,7 @@ public class QuizCreationFragmentEditing extends Fragment {
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
                             VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)).commit();
+            playerActivity.simpleExoPlayer.setPlayWhenReady(true);
         }
         else
         {
@@ -116,7 +114,7 @@ public class QuizCreationFragmentEditing extends Fragment {
     }
 
 
-    private void saveAnnotation(Annotations annotation, Bitmap thumbnail, int annotationId)
+    private void saveAnnotation(AnnotationWrapper annotation, Bitmap thumbnail, int annotationId)
     {
         StorageModule storageModule = new StorageModule();
         if (storageModule.isExternalStorageWritable())

@@ -4,23 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.webkit.WebChromeClient;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +40,7 @@ public class StorageModule
         return externalStorageVolumes[0];
     }
 
-    public static boolean storeXML(Context context, Annotations annotation)
+    public static boolean storeXML(Context context, AnnotationWrapper annotation)
     {
         try
         {
@@ -69,9 +61,9 @@ public class StorageModule
         return true;
     }
 
-    public static HashMap<String, Annotations> loadXML(Context context)
+    public static HashMap<String, AnnotationWrapper> loadXML(Context context)
     {
-        HashMap<String, Annotations> tempAnnotationsWrapper = new HashMap<>();
+        HashMap<String, AnnotationWrapper> tempAnnotationsWrapper = new HashMap<>();
         try
         {
             File directory = new File(getPrimaryExternalStorageVolume(context) + "/" + FOLDER_NAME);
@@ -80,17 +72,17 @@ public class StorageModule
             for(File fileToLoad : files)
             {
                 Serializer serializer = new Persister();
-                Annotations annotations = serializer.read(Annotations.class, fileToLoad);
-                tempAnnotationsWrapper.put(annotations.getId(), annotations);
+                AnnotationWrapper annotationWrapper = serializer.read(AnnotationWrapper.class, fileToLoad);
+                tempAnnotationsWrapper.put(annotationWrapper.getId(), annotationWrapper);
             }
 
             for(Map.Entry mapElement : tempAnnotationsWrapper.entrySet())
             {
-                Annotations annotationWrapper = (Annotations) mapElement.getValue();
+                AnnotationWrapper annotationWrapper = (AnnotationWrapper) mapElement.getValue();
                 String filepath = getPrimaryExternalStorageVolume(context) + "/" + THUMBNAIL_FOLDER_NAME_PREFIX + annotationWrapper.getId();
                 for(Map.Entry innerMapElement : annotationWrapper.getVideoAnnotationsMap().entrySet())
                 {
-                    AnnotationData annotation = (AnnotationData) innerMapElement.getValue();
+                    Annotations annotation = (Annotations) innerMapElement.getValue();
                     String finalfilepath = filepath + "/" + annotation.getId() + THUMBNAIL_EXTENSION;
                     annotation.setThumbnail(BitmapFactory.decodeFile(finalfilepath));
                 }

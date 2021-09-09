@@ -23,14 +23,16 @@ public class QuizQuestion
     }
 
     public QuizQuestion(String question, String correctAnswer, String answer1, String answer2, String answer3) {
+        String tempQuestion;
         if(!question.contains("?"))
-            this.question =  question + "?";
+            tempQuestion =  question + "?";
         else
-            this.question = question;
-        this.correctAnswer = correctAnswer;
-        this.answer1 = answer1;
-        this.answer2 = answer2;
-        this.answer3 = answer3;
+            tempQuestion = question;
+        this.question = tempQuestion.substring(0,1).toUpperCase() + tempQuestion.substring(1);;
+        this.correctAnswer = correctAnswer.substring(0,1).toUpperCase() + correctAnswer.substring(1);
+        this.answer1 = answer1.substring(0,1).toUpperCase() + answer1.substring(1);
+        this.answer2 = answer2.substring(0,1).toUpperCase() + answer2.substring(1);
+        this.answer3 = answer3.substring(0,1).toUpperCase() + answer3.substring(1);
     }
 
     public String getQuestion() {

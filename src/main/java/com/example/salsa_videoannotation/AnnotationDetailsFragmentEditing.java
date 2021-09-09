@@ -27,8 +27,8 @@ public class AnnotationDetailsFragmentEditing extends Fragment
     private Button save;
     private TextView startTime;
     private PlayerActivity playerActivity;
-    private Annotations currentAnnotationWrapper;
-    private AnnotationData currentAnnotation;
+    private AnnotationWrapper currentAnnotationWrapper;
+    private Annotations currentAnnotation;
     public AnnotationDetailsFragmentEditing()
     {
 
@@ -39,9 +39,9 @@ public class AnnotationDetailsFragmentEditing extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_annotation_details_editing, container, false);
         categoryMultiSelectSpinner = view.findViewById(R.id.categorySelector);
-        categoryMultiSelectSpinner.setItems(AnnotationData.CATEGORIES);
+        categoryMultiSelectSpinner.setItems(Annotations.CATEGORIES);
         bodypartMultiSelectSpinner = view.findViewById(R.id.bodypartSelector);
-        bodypartMultiSelectSpinner.setItems(AnnotationData.BODYPARTS);
+        bodypartMultiSelectSpinner.setItems(Annotations.BODYPARTS);
         content = view.findViewById(R.id.annotation_content);
         save = view.findViewById(R.id.save_button);
         startTime = view.findViewById(R.id.start_time);
@@ -83,7 +83,7 @@ public class AnnotationDetailsFragmentEditing extends Fragment
             long startTimeLong = playerActivity.simpleExoPlayer.getCurrentPosition();
             Bitmap annotationThumbnail = HelperTool.getVideoFrame(startTimeLong, currentAnnotationWrapper.getVideoFilePath());
 
-            currentAnnotationWrapper.handleAnnotationManipulation(Annotations.UPDATE_TRANSACTION,
+            currentAnnotationWrapper.handleAnnotationManipulation(AnnotationWrapper.UPDATE_TRANSACTION,
                     currentAnnotation.getId(), startTimeLong
                     , categoryMultiSelectSpinner.getSelectedStrings(),
                     bodypartMultiSelectSpinner.getSelectedStrings(),
@@ -94,6 +94,7 @@ public class AnnotationDetailsFragmentEditing extends Fragment
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(currentAnnotationWrapper,
                             VideoAdapter.VIDEO_TYPE_FEEDBACK)).commit();
+            playerActivity.simpleExoPlayer.setPlayWhenReady(true);
         }
         else
         {
@@ -102,7 +103,7 @@ public class AnnotationDetailsFragmentEditing extends Fragment
     }
 
 
-    private void saveAnnotation(Annotations annotation, Bitmap thumbnail, int annotationId)
+    private void saveAnnotation(AnnotationWrapper annotation, Bitmap thumbnail, int annotationId)
     {
         StorageModule storageModule = new StorageModule();
         if (storageModule.isExternalStorageWritable())

@@ -20,8 +20,8 @@ public class ViewFeedbackFragment extends Fragment {
     private TextView content;
     private TextView startTime;
     private PlayerActivity playerActivity;
-    private Annotations currentAnnotationWrapper;
-    private AnnotationData currentAnnotation;
+    private AnnotationWrapper currentAnnotationWrapper;
+    private Annotations currentAnnotation;
 
     public ViewFeedbackFragment()
     {

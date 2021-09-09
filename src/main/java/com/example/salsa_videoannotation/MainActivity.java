@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
     public static ArrayList<VideoFiles> quizVideos = new ArrayList<>();
     public static ArrayList<VideoFiles> feedbackVideos = new ArrayList<>();
-    static HashMap<String, Annotations> annotationWrapperList = new HashMap<>();
+    static HashMap<String, AnnotationWrapper> annotationWrapperList = new HashMap<>();
     private static final String FEEDBACK_FOLDER_NAME = "Feedback";
     private static final String QUIZ_FOLDER_NAME = "Quiz";
 
