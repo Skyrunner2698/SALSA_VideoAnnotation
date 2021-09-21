@@ -1,5 +1,8 @@
 package com.example.salsa_videoannotation;
 
+/**
+ * Object to hold all data related to the videos used for Annotation and playback
+ */
 public class VideoFiles
 {
     private String id;

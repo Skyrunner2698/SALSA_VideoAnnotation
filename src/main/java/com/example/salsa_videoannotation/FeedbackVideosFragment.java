@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static com.example.salsa_videoannotation.MainActivity.feedbackVideos;
 
+/**
+ * Fragment inserted within the MainActivity class to view the videos associated with Feedback Viewing and Creation
+ */
 public class FeedbackVideosFragment extends Fragment {
 
     RecyclerView recyclerView;
@@ -22,17 +25,30 @@ public class FeedbackVideosFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Acquires the videoType to handle the title for the section
+     * @param videoType
+     */
     public FeedbackVideosFragment(int videoType)
     {
         this.videoType = videoType;
     }
 
+    /**
+     * Inflates the layout for displaying videos associated with Feedback
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_feedback_video_list, container, false);
         recyclerView = view.findViewById(R.id.feedbackRV);
         TextView heading = view.findViewById(R.id.feedback_creation_Heading);
+
+        // Determines which heading to give the section
         if(videoType == VideoAdapter.VIDEO_TYPE_FEEDBACK)
         {
             heading.setText(getResources().getText(R.string.feedback_creation_heading));
@@ -41,6 +57,8 @@ public class FeedbackVideosFragment extends Fragment {
         {
             heading.setText(getResources().getText(R.string.feedback_view_heading));
         }
+
+        // Creates the adapter and populates the RecyclerView
         if(feedbackVideos != null && feedbackVideos.size() > 0)
         {
             videoAdapter = new com.example.salsa_videoannotation.VideoAdapter(getContext(), feedbackVideos, videoType);

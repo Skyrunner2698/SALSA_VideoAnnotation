@@ -3,6 +3,9 @@ package com.example.salsa_videoannotation;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+/**
+ * Object to hold the question and answers for a Quiz Annotation
+ */
 @Root
 public class QuizQuestion
 {
@@ -24,10 +27,12 @@ public class QuizQuestion
 
     public QuizQuestion(String question, String correctAnswer, String answer1, String answer2, String answer3) {
         String tempQuestion;
+        // Checks if a question does contain a question mark and adds one if not
         if(!question.contains("?"))
             tempQuestion =  question + "?";
         else
             tempQuestion = question;
+        // Capitalizes the first letter of every question and answer
         this.question = tempQuestion.substring(0,1).toUpperCase() + tempQuestion.substring(1);;
         this.correctAnswer = correctAnswer.substring(0,1).toUpperCase() + correctAnswer.substring(1);
         this.answer1 = answer1.substring(0,1).toUpperCase() + answer1.substring(1);

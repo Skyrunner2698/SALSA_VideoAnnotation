@@ -1,5 +1,9 @@
 package com.example.salsa_videoannotation;
 
+/**
+ * Object to hold the answer status and answer text for an answered quiz question
+ * Used to track the answers given
+ */
 public class QuizAnswers
 {
     private int answerStatus;

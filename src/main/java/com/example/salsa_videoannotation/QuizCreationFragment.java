@@ -23,6 +23,9 @@ import static com.example.salsa_videoannotation.MainActivity.annotationWrapperLi
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Fragment inserted within the PlayerActivity class to create new Quiz Annotations
+ */
 public class QuizCreationFragment extends Fragment {
     private MultiSelectionSpinner categoryMultiSelectSpinner;
     private MultiSelectionSpinner bodypartMultiSelectSpinner;
@@ -41,7 +44,13 @@ public class QuizCreationFragment extends Fragment {
         // Required empty public constructor
     }
 
-
+    /**
+     * Inflates the layout for creating Quiz Annotations
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
@@ -59,7 +68,7 @@ public class QuizCreationFragment extends Fragment {
         answer3 = view.findViewById(R.id.annotation_answer_3);
         playerActivity = (PlayerActivity) getActivity();
 
-
+        // Hides the "Create Annotation" button to allow for more space for the creation fragment on the screen.
         ImageView createAnnotation = playerActivity.findViewById(R.id.new_annotation);
         createAnnotation.setVisibility(View.INVISIBLE);
         ConstraintLayout parentLayout = playerActivity.findViewById(R.id.parent_layout);
@@ -72,6 +81,11 @@ public class QuizCreationFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Checks the required values are entered
+     * Creates the new id for the annotation object
+     * Saves the annotation
+     */
     public void addQuizAnnotationAndSave()
     {
         if(checkValues())
@@ -79,13 +93,17 @@ public class QuizCreationFragment extends Fragment {
             String id = playerActivity.myFiles.get(playerActivity.position).getId();
             String path = playerActivity.myFiles.get(playerActivity.position).getPath();
 
+            //Acquires the correct annotationWrapper based on the id of the video being played
             AnnotationWrapper annotationWrapper = HelperTool.getOrCreateAnnotationByVideoIdAndPath(id, path);
 
             long startTimeLong = playerActivity.simpleExoPlayer.getCurrentPosition();
+            // Extracts videoframe to use as thumbnail for annotation
             Bitmap annotationThumbnail = HelperTool.getVideoFrame(startTimeLong, path);
+            // Creates a new QuizQuestion object from inputs on the fragment
             QuizQuestion quizQuestion = new QuizQuestion(question.getText().toString(), correctAnswer.getText().toString(),
                     answer1.getText().toString(), answer2.getText().toString(), answer3.getText().toString());
 
+            //Constructs the new id for the annotation by getting the id of the last created annotation and adding one
             int newAnnotationId = 1;
             if (annotationWrapper.getVideoAnnotationsMap() != null && annotationWrapper.getVideoAnnotationsMap().size() != 0) {
                 Set<Map.Entry<Integer, Annotations>> mapValues = annotationWrapper.getVideoAnnotationsMap().entrySet();
@@ -95,35 +113,47 @@ public class QuizCreationFragment extends Fragment {
                 newAnnotationId = lastEntry.getId() + 1;
             }
 
+            // Calls an AnnotationWrapper method to create the Annotation Object
             annotationWrapper.handleAnnotationManipulation(AnnotationWrapper.CREATE_TRANSACTION,
                     newAnnotationId, startTimeLong
                     , categoryMultiSelectSpinner.getSelectedStrings(),
                     bodypartMultiSelectSpinner.getSelectedStrings(),
                     null, annotationThumbnail, quizQuestion);
 
+            // Saves the AnnotationWrapper with the new annotation object to the SD card.
             saveAnnotation(annotationWrapper, annotationThumbnail, newAnnotationId);
+            // Loads a new Display Fragment
             playerActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.annotation_section, new AnnotationDisplayFragment(annotationWrapper,
                            VideoAdapter.VIDEO_TYPE_QUIZ_CREATION)).commit();
+            // Restarts the video playback
             playerActivity.simpleExoPlayer.setPlayWhenReady(true);
         }
         else
         {
+            // Displays error message if fields are incomplete
             Toast.makeText(playerActivity, "Category, Bodypart and Quiz Content cannot be blank.", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void saveAnnotation(AnnotationWrapper annotation, Bitmap thumbnail, int annotationId)
+    /**
+     * Calls the static StorageModule methods to serialize and save the AnnotationWrapper and Thumbnail respectively
+     * @param annotationWrapper
+     * @param thumbnail
+     * @param newAnnotationId
+     */
+    private void saveAnnotation(AnnotationWrapper annotationWrapper, Bitmap thumbnail, int newAnnotationId)
     {
         StorageModule storageModule = new StorageModule();
         if (storageModule.isExternalStorageWritable())
         {
-            if(storageModule.storeXML(getContext(), annotation) && StorageModule.storeThumbnail(getContext(), annotation.getId(), annotationId, thumbnail))
+            if(storageModule.storeXML(getContext(), annotationWrapper) && StorageModule.storeThumbnail(getContext(), annotationWrapper.getId(), newAnnotationId, thumbnail))
             {
-                if(annotationWrapperList.containsKey(annotation.getId()))
-                    annotationWrapperList.replace(annotation.getId(), annotation);
+                // Updates the static list of AnnotationWrappers loaded into the application
+                if(annotationWrapperList.containsKey(annotationWrapper.getId()))
+                    annotationWrapperList.replace(annotationWrapper.getId(), annotationWrapper);
                 else
-                    annotationWrapperList.put(annotation.getId(), annotation);
+                    annotationWrapperList.put(annotationWrapper.getId(), annotationWrapper);
 
                 Toast.makeText(getContext(), "Annotations Saved", Toast.LENGTH_SHORT).show();
             }
@@ -134,6 +164,10 @@ public class QuizCreationFragment extends Fragment {
         }
     }
 
+    /**
+     * Checks if any required fields are left incomplete
+     * @return
+     */
     public boolean checkValues()
     {
         if (categoryMultiSelectSpinner.getSelectedStrings().size() == 0 ||

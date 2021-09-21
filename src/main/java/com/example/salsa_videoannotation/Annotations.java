@@ -10,9 +10,14 @@ import org.simpleframework.xml.Root;
 
 import java.util.List;
 
+/**
+ * Object to hold all the information pertaining to a single annotation at a point in time
+ */
 @Root
 public class Annotations
 {
+    // static lists controlling the options available from the dropdown selectors
+    // for Bodypart and Category when creating Feedback and Quiz questions
     public static final String[] CATEGORIES = {"Step Direction", "Foot Position", "Step Size", "Weight Transfer", "Movement Quality", "Timing", "Rhythm", "Suggested Moves to try"};
     public static final String[] BODYPARTS = {"Head", "Shoulders", "Arms", "Hands", "Torso", "Hips", "Legs", "Feet"};
     @Attribute
@@ -34,10 +39,12 @@ public class Annotations
 
     }
 
+    // Constructor for Feedback
     public Annotations(int id, long startTime, List<String> category, List<String> bodyPart, String content, Bitmap thumbnail) {
         this(id, startTime, category, bodyPart, content, null, thumbnail);
     }
 
+    // Constructor for Quiz Questions
     public Annotations(int id, long startTime, List<String> category, List<String> bodyPart, String content, QuizQuestion quizQuestion, Bitmap thumbnail) {
         this.id = id;
         this.startTime = startTime;

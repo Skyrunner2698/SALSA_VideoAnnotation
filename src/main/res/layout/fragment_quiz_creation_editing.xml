@@ -11,6 +11,31 @@
     android:layout_height="wrap_content"
     tools:context=".QuizCreationFragment">
 
+    <ImageView
+        android:id="@+id/prev_Annotation"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_baseline_navigate_prev"
+        android:layout_marginLeft="10dp"
+        android:onClick="onPreviousAnnotationClick"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"/>
+
+    <ImageView
+        android:id="@+id/next_Annotation"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_baseline_navigate_next"
+        android:layout_marginRight="10dp"
+        android:onClick="onNextAnnotationClick"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"/>
+
     <TextView
         android:id="@+id/start_time_label"
         android:layout_width="wrap_content"
@@ -21,7 +46,7 @@
         android:textSize="20sp"
         android:textColor="@color/PrimaryText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/prev_Annotation" />
 
     <TextView
         android:id="@+id/start_time"
@@ -32,8 +57,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/start_time_label"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/start_time_label"/>
+        app:layout_constraintTop_toBottomOf="@id/prev_Annotation"/>
 
     <TextView
         android:id="@+id/category_label"
